@@ -1,30 +1,46 @@
-﻿program ConsoleReadPasFile;
+program ConsoleReadPasFile;
 
 {$APPTYPE CONSOLE}
 
 {$R *.res}
 
 uses
+  Winapi.Windows,
   Classes,
   System.SysUtils,
   IOUtils,
-  TreeSitter in 'TreeSitter.pas',
-  TreeSitterLib in 'TreeSitterLib.pas';
+  TreeSitter,
+  TreeSitterLib,
+  TreeSitter.Loader;
 
-function tree_sitter_pascal(): PTSLanguage; cdecl; external 'tree-sitter-pascal';
+type
+  TTSGetLanguageFunc = function(): PTSLanguage; cdecl;
 
 procedure ReadAndParsePasFile(const AFileName: string);
 var
   parser: TTSParser;
   fs: TFileStream;
   tree: TTSTree;
+  libHandle: THandle;
+  pAPI: TTSGetLanguageFunc;
 begin
+  if not TTreeSitterLoader.Load then
+    raise Exception.Create('Failed to load tree-sitter core library');
+
+  libHandle := LoadLibrary('tree-sitter-pascal.dll');
+  if libHandle = 0 then
+    raise Exception.Create('Failed to load tree-sitter-pascal.dll');
+
+  pAPI := GetProcAddress(libHandle, 'tree_sitter_pascal');
+  if not Assigned(pAPI) then
+    raise Exception.Create('Failed to find tree_sitter_pascal function');
+
   tree:= nil;
   parser:= nil;
   fs:= TFileStream.Create(AFileName, fmOpenRead or fmShareDenyNone);
   try
     parser:= TTSParser.Create;
-    parser.Language:= tree_sitter_pascal;
+    parser.Language:= pAPI;
     tree:= parser.parse(
       function (AByteIndex: UInt32; APosition: TTSPoint; var ABytesRead: UInt32): TBytes
       const
@@ -56,7 +72,7 @@ var
   fn: string;
 begin
   try
-    fn:= TPath.Combine(TPath.GetDirectoryName(ParamStr(0)), '..\..\TreeSitter.pas');
+    fn:= TPath.Combine(TPath.GetDirectoryName(ParamStr(0)), '..\..\..\Source\TreeSitter.pas');
     if TFile.Exists(fn) then
       ReadAndParsePasFile(fn) else
       raise Exception.CreateFmt('Failed to find file to parse: "%s"', [fn]);
@@ -66,3 +82,4 @@ begin
       Writeln(E.ClassName, ': ', E.Message);
   end;
 end.
+

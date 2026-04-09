@@ -1,0 +1,63 @@
+object DTSMainFormFMX: TDTSMainFormFMX
+  Left = 0
+  Top = 0
+  Caption = 'Form1'
+  ClientHeight = 480
+  ClientWidth = 640
+  FormFactor.Width = 320
+  FormFactor.Height = 480
+  FormFactor.Devices = [Desktop]
+  OnCreate = FormCreate
+  DesignerMasterStyle = 0
+  object pnlTop: TPanel
+    Align = Top
+    Size.Width = 640.000000000000000000
+    Size.Height = 120.000000000000000000
+    Size.PlatformDefault = False
+    TabOrder = 1
+    object btnLoad: TButton
+      Position.X = 80.000000000000000000
+      Position.Y = 40.000000000000000000
+      TabOrder = 1
+      Text = 'btnLoad'
+      OnClick = btnLoadClick
+    end
+    object cbCode: TComboBox
+      Position.X = 376.000000000000000000
+      Position.Y = 48.000000000000000000
+      TabOrder = 2
+      OnChange = cbCodeChange
+    end
+  end
+  object treeView: TTreeView
+    Align = Left
+    Position.Y = 120.000000000000000000
+    Size.Width = 160.000000000000000000
+    Size.Height = 360.000000000000000000
+    Size.PlatformDefault = False
+    TabOrder = 2
+    Viewport.Width = 156.000000000000000000
+    Viewport.Height = 356.000000000000000000
+  end
+  object memCode: TMemo
+    Touch.InteractiveGestures = [Pan, LongTap, DoubleTap]
+    DataDetectorTypes = []
+    Align = Client
+    Size.Width = 463.000000000000000000
+    Size.Height = 360.000000000000000000
+    Size.PlatformDefault = False
+    TabOrder = 3
+    Viewport.Width = 459.000000000000000000
+    Viewport.Height = 356.000000000000000000
+  end
+  object Splitter1: TSplitter
+    Align = Left
+    Cursor = crHSplit
+    MinSize = 20.000000000000000000
+    Position.X = 160.000000000000000000
+    Position.Y = 120.000000000000000000
+    Size.Width = 17.000000000000000000
+    Size.Height = 360.000000000000000000
+    Size.PlatformDefault = False
+  end
+end

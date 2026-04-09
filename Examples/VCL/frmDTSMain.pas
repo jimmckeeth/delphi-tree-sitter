@@ -5,7 +5,8 @@ interface
 uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants,
   System.Classes, Vcl.Graphics, Vcl.Controls, Vcl.Forms, Vcl.Dialogs,
-  Vcl.ExtCtrls, Vcl.ComCtrls, Vcl.StdCtrls, TreeSitter, Vcl.Grids,
+  Vcl.ExtCtrls, Vcl.ComCtrls, Vcl.StdCtrls, TreeSitter, TreeSitterLib,
+  TreeSitter.Loader, TreeSitter.Downloader, Vcl.Grids,
   System.Actions, Vcl.ActnList, Vcl.Menus;
 
 type
@@ -257,8 +258,18 @@ var
   libHandle: THandle;
   pAPI: TTSGetLanguageFunc;
 begin
-  tsLibName:= Format('tree-sitter-%s', [ALangBaseName]);
+  tsLibName:= Format('tree-sitter-%s', [ALangBaseName]) + TTreeSitterDownloader.GetPlatformExtension;
   libHandle:= LoadLibrary(PChar(tsLibName));
+  if libHandle = 0 then
+  begin
+    if MessageDlg(Format('Grammar library "%s" not found. Download it?', [tsLibName]), mtConfirmation, [mbYes, mbNo], 0) = mrYes then
+    begin
+      if not TTreeSitterDownloader.DownloadFile(TTreeSitterDownloader.GetGrammarURL(ALangBaseName), tsLibName) then
+        raise Exception.CreateFmt('Failed to download grammar library "%s".', [tsLibName]);
+      libHandle:= LoadLibrary(PChar(tsLibName));
+    end;
+  end;
+
   if libHandle = 0 then
     raise Exception.CreateFmt('Could not load library "%s"', [tsLibName]);
   tsAPIName:= Format('tree_sitter_%s', [ALangBaseName]);
@@ -325,6 +336,19 @@ procedure TDTSMainForm.FormCreate(Sender: TObject);
 var
   row: TSGNodePropRow;
 begin
+  if not TTreeSitterLoader.Load then
+  begin
+    if MessageDlg('Tree-sitter library not found. Download it?', mtConfirmation, [mbYes, mbNo], 0) = mrYes then
+    begin
+      if not TTreeSitterDownloader.DownloadFile(TTreeSitterDownloader.GetCoreURL, TTreeSitterLoader.DefaultLibName) then
+        raise Exception.Create('Failed to download tree-sitter library.');
+      if not TTreeSitterLoader.Load then
+        raise Exception.Create('Failed to load tree-sitter library after download.');
+    end
+    else
+      raise Exception.Create('Tree-sitter library is required.');
+  end;
+
   //initialize property grid captions
   sgNodeProps.RowCount:= Ord(High(TSGNodePropRow)) - Ord(Low(TSGNodePropRow)) + 1;
   for row:= Low(TSGNodePropRow) to High(TSGNodePropRow) do

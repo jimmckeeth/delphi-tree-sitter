@@ -1,0 +1,60 @@
+﻿<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+    <PropertyGroup>
+        <ProjectGuid>{43B6195C-58C1-4077-9A9C-493BC1859176}</ProjectGuid>
+    </PropertyGroup>
+    <ItemGroup>
+        <Projects Include="Console\ConsoleReadPasFile.dproj">
+            <Dependencies/>
+        </Projects>
+        <Projects Include="FMX\DelphiTreeSitterFMXDemo.dproj">
+            <Dependencies/>
+        </Projects>
+        <Projects Include="VCL\DelphiTreeSitterVCLDemo.dproj">
+            <Dependencies/>
+        </Projects>
+    </ItemGroup>
+    <ProjectExtensions>
+        <Borland.Personality>Default.Personality.12</Borland.Personality>
+        <Borland.ProjectType/>
+        <BorlandProject>
+            <Default.Personality/>
+        </BorlandProject>
+    </ProjectExtensions>
+    <Target Name="ConsoleReadPasFile">
+        <MSBuild Projects="Console\ConsoleReadPasFile.dproj"/>
+    </Target>
+    <Target Name="ConsoleReadPasFile:Clean">
+        <MSBuild Projects="Console\ConsoleReadPasFile.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="ConsoleReadPasFile:Make">
+        <MSBuild Projects="Console\ConsoleReadPasFile.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="DelphiTreeSitterFMXDemo">
+        <MSBuild Projects="FMX\DelphiTreeSitterFMXDemo.dproj"/>
+    </Target>
+    <Target Name="DelphiTreeSitterFMXDemo:Clean">
+        <MSBuild Projects="FMX\DelphiTreeSitterFMXDemo.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="DelphiTreeSitterFMXDemo:Make">
+        <MSBuild Projects="FMX\DelphiTreeSitterFMXDemo.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="DelphiTreeSitterVCLDemo">
+        <MSBuild Projects="VCL\DelphiTreeSitterVCLDemo.dproj"/>
+    </Target>
+    <Target Name="DelphiTreeSitterVCLDemo:Clean">
+        <MSBuild Projects="VCL\DelphiTreeSitterVCLDemo.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="DelphiTreeSitterVCLDemo:Make">
+        <MSBuild Projects="VCL\DelphiTreeSitterVCLDemo.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="Build">
+        <CallTarget Targets="ConsoleReadPasFile;DelphiTreeSitterFMXDemo;DelphiTreeSitterVCLDemo"/>
+    </Target>
+    <Target Name="Clean">
+        <CallTarget Targets="ConsoleReadPasFile:Clean;DelphiTreeSitterFMXDemo:Clean;DelphiTreeSitterVCLDemo:Clean"/>
+    </Target>
+    <Target Name="Make">
+        <CallTarget Targets="ConsoleReadPasFile:Make;DelphiTreeSitterFMXDemo:Make;DelphiTreeSitterVCLDemo:Make"/>
+    </Target>
+    <Import Project="$(BDS)\Bin\CodeGear.Group.Targets" Condition="Exists('$(BDS)\Bin\CodeGear.Group.Targets')"/>
+</Project>
