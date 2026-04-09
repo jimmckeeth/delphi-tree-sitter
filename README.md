@@ -1,10 +1,10 @@
 # delphi-tree-sitter
 
-Delphi (and potentially FreePascal) bindings for consuming [tree-sitter][https://github.com/tree-sitter/tree-sitter] grammar. Not to be confused with [tree-sitter-pascal](https://github.com/jimmckeeth/tree-sitter-pascal), the grammar allowing tree-sitter to understand Delphi's Object Pascal and Free Pascal. 
+<img src="Docs\Delphi-tree-sitter.avif" alt="Delphi-tree-sitter.avif" style="zoom:20%; float:right;" />Delphi (and potentially Free Pascal) bindings for consuming [tree-sitter](https://github.com/tree-sitter/tree-sitter) grammar. Not to be confused with [tree-sitter-pascal](https://github.com/jimmckeeth/tree-sitter-pascal), the grammar allowing tree-sitter to understand Delphi's Object Pascal, Free Pascal, and similar Pascal dialects.  
 
 ## Status
 
-Windows only for now and only tested with Delphi.
+Windows only for now and only tested with Delphi, but expanding to other platforms.  
 
 
 | API section | Status |
@@ -23,15 +23,14 @@ Windows only for now and only tested with Delphi.
 
 No design-time packages etc. necessary. The demos with GUI - as of yet - do not require any additional 3rd party packages.
 
-To run the demos, you need to have `tree-sitter.dll` (of the right architecure) somewhere, where the EXE will 
-be able to find it (it won't even start without).
+To run the demos, you need to have `tree-sitter.dll` (of the right architecture) somewhere, where the EXE will be able to find it (it won't even start without).
 
 For the different parsers (sometimes called grammars) you need a DLL too, e.g. [tree-sitter-c][]
 
 If you don't have a C compiler setup at hand to compile the tree-sitter DLLs, I can highly recommend [zig][]. 
 
 Tree-sitter itself already comes with a `build.zig` file, so running `zig build` in the root directory of tree-sitter will work. 
-This might build a .lib instead of a .dll, so in `build.zig` you would need to change `b.addStaticLibrary` into `b.addSharedLibrary`.
+This might build a .lib instead of a `.dll`, so in `build.zig` you would need to change `b.addStaticLibrary` into `b.addSharedLibrary`.
 
 Most parsers do not seem to come with zig-support out of the box, but it should be straightforward to create a `build.zig` and use the one from tree-sitter itself as a template.
 
