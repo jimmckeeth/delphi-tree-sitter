@@ -72,11 +72,10 @@ var
   fn: string;
 begin
   try
-    fn:= TPath.Combine(TPath.GetDirectoryName(ParamStr(0)), '..\..\..\Source\TreeSitter.pas');
+    fn:= TPath.Combine(TPath.GetDirectoryName(ParamStr(0)), '..\..\..\..\Source\TreeSitter.pas');
     if TFile.Exists(fn) then
       ReadAndParsePasFile(fn) else
       raise Exception.CreateFmt('Failed to find file to parse: "%s"', [fn]);
-    ReadLn;
   except
     on E: Exception do
       Writeln(E.ClassName, ': ', E.Message);
