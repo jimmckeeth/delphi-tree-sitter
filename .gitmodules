@@ -1,6 +1,3 @@
 [submodule "tree-sitter-pascal"]
 	path = tree-sitter-pascal
 	url = https://github.com/jimmckeeth/tree-sitter-pascal.git
-[submodule "tree-sitter"]
-	path = tree-sitter
-	url = https://github.com/tree-sitter/tree-sitter.git
