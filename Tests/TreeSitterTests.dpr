@@ -14,7 +14,8 @@ uses
   DUnitX.Loggers.Xml.NUnit,
   {$ENDIF }
   DUnitX.TestFramework,
-  TreeSitterCoreTests in 'TreeSitterCoreTests.pas';
+  TreeSitterCoreTests in 'TreeSitterCoreTests.pas',
+  AppTests in 'AppTests.pas';
 
 { keep comment here to protect the following conditional from being removed by the IDE when adding a unit }
 {$IFNDEF TESTINSIGHT}

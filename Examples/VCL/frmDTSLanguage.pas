@@ -5,7 +5,7 @@ interface
 uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants,
   System.Classes, Vcl.Graphics, Vcl.Controls, Vcl.Forms, Vcl.Dialogs,
-  Vcl.ExtCtrls, Vcl.Grids, Vcl.StdCtrls, TreeSitter;
+  Vcl.ExtCtrls, Vcl.Grids, Vcl.StdCtrls, System.UITypes, TreeSitter;
 
 type
   TDTSLanguageForm = class(TForm)
@@ -35,6 +35,11 @@ implementation
 
 procedure ShowLanguageInfo(ALanguage: PTSLanguage);
 begin
+  if ALanguage = nil then
+  begin
+    MessageDlg('No language loaded.', mtError, [mbOK], 0);
+    Exit;
+  end;
   if DTSLanguageForm = nil then
   begin
     Application.Createform(TDTSLanguageForm, DTSLanguageForm);

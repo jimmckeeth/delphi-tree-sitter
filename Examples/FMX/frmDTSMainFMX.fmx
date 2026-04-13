@@ -1,63 +1,88 @@
 object DTSMainFormFMX: TDTSMainFormFMX
   Left = 0
   Top = 0
-  Caption = 'Form1'
+  Caption = 'Delphi Tree-Sitter Explorer'
   ClientHeight = 480
   ClientWidth = 640
   FormFactor.Width = 320
   FormFactor.Height = 480
   FormFactor.Devices = [Desktop]
   OnCreate = FormCreate
+  OnDestroy = FormDestroy
   DesignerMasterStyle = 0
   object pnlTop: TPanel
     Align = Top
     Size.Width = 640.000000000000000000
-    Size.Height = 120.000000000000000000
+    Size.Height = 41.000000000000000000
     Size.PlatformDefault = False
     TabOrder = 1
     object btnLoad: TButton
-      Position.X = 80.000000000000000000
-      Position.Y = 40.000000000000000000
+      Position.X = 160.000000000000000000
+      Position.Y = 8.000000000000000000
       TabOrder = 1
-      Text = 'btnLoad'
+      Text = 'Load File'
       OnClick = btnLoadClick
     end
     object cbCode: TComboBox
-      Position.X = 376.000000000000000000
-      Position.Y = 48.000000000000000000
+      Anchors = [akTop, akRight]
+      Position.X = 532.000000000000000000
+      Position.Y = 8.000000000000000000
       TabOrder = 2
       OnChange = cbCodeChange
+    end
+    object Label1: TLabel
+      Anchors = [akTop, akRight]
+      Position.X = 456.000000000000000000
+      Position.Y = 10.000000000000000000
+      Size.Width = 68.000000000000000000
+      Size.Height = 17.000000000000000000
+      Size.PlatformDefault = False
+      TextSettings.HorzAlign = Trailing
+      Text = 'Grammar'
+      TabOrder = 3
+    end
+    object cbFiles: TComboBox
+      Items.Strings = (
+        '')
+      Position.X = 8.000000000000000000
+      Position.Y = 9.000000000000000000
+      Size.Width = 144.000000000000000000
+      Size.Height = 22.000000000000000000
+      Size.PlatformDefault = False
+      TabOrder = 4
+      OnChange = cbFilesChange
     end
   end
   object treeView: TTreeView
     Align = Left
-    Position.Y = 120.000000000000000000
+    Position.Y = 41.000000000000000000
     Size.Width = 160.000000000000000000
-    Size.Height = 360.000000000000000000
+    Size.Height = 439.000000000000000000
     Size.PlatformDefault = False
     TabOrder = 2
     Viewport.Width = 156.000000000000000000
-    Viewport.Height = 356.000000000000000000
+    Viewport.Height = 435.000000000000000000
   end
   object memCode: TMemo
     Touch.InteractiveGestures = [Pan, LongTap, DoubleTap]
     DataDetectorTypes = []
     Align = Client
     Size.Width = 463.000000000000000000
-    Size.Height = 360.000000000000000000
+    Size.Height = 439.000000000000000000
     Size.PlatformDefault = False
     TabOrder = 3
+    OnExit = memCodeExit
     Viewport.Width = 459.000000000000000000
-    Viewport.Height = 356.000000000000000000
+    Viewport.Height = 435.000000000000000000
   end
   object Splitter1: TSplitter
     Align = Left
     Cursor = crHSplit
     MinSize = 20.000000000000000000
     Position.X = 160.000000000000000000
-    Position.Y = 120.000000000000000000
+    Position.Y = 41.000000000000000000
     Size.Width = 17.000000000000000000
-    Size.Height = 360.000000000000000000
+    Size.Height = 439.000000000000000000
     Size.PlatformDefault = False
   end
 end

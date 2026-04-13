@@ -5,7 +5,8 @@ interface
 uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants,
   System.Classes, Vcl.Graphics, Vcl.Controls, Vcl.Forms, Vcl.Dialogs,
-  Vcl.ExtCtrls, Vcl.StdCtrls, TreeSitter.Query, TreeSitter, Vcl.Grids;
+  Vcl.ExtCtrls, Vcl.StdCtrls, TreeSitter.Query, TreeSitter, Vcl.Grids,
+  System.UITypes;
 
 type
   TDTSQueryForm = class(TForm)
@@ -61,6 +62,11 @@ uses
 
 procedure ShowQueryForm(ATree: TTSTree);
 begin
+  if ATree = nil then
+  begin
+    MessageDlg('No syntax tree available.', mtError, [mbOK], 0);
+    Exit;
+  end;
   if DTSQueryForm = nil then
   begin
     Application.Createform(TDTSQueryForm, DTSQueryForm);
@@ -71,7 +77,7 @@ begin
   DTSQueryForm.BringToFront;
 end;
 
-{ TDTSQuery }
+{ TDTSQueryForm }
 
 procedure TDTSQueryForm.btnExecuteClick(Sender: TObject);
 const
@@ -82,7 +88,9 @@ var
   errorType: TTSQueryError;
   i: Integer;
 begin
+  if FTree = nil then Exit;
   ClearQuery;
+//...
 
   FQuery:= TTSQuery.Create(FTree.Language, memQuery.Lines.Text, errorOffset, errorType);
   if errorType <> TTSQueryError.TSQueryErrorNone then

@@ -5,7 +5,7 @@
         <Config Condition="'$(Config)'==''">Release</Config>
         <FrameworkType>FMX</FrameworkType>
         <MainSource>DelphiTreeSitterFMXDemo.dpr</MainSource>
-        <Platform Condition="'$(Platform)'==''">Win32</Platform>
+        <Platform Condition="'$(Platform)'==''">Win64</Platform>
         <ProjectGuid>{AD09404F-C706-4759-90F3-DB0952D099E5}</ProjectGuid>
         <ProjectName Condition="'$(ProjectName)'==''">DelphiTreeSitterFMXDemo</ProjectName>
         <ProjectVersion>20.4</ProjectVersion>

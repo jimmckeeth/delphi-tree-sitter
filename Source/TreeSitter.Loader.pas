@@ -84,16 +84,32 @@ begin
 end;
 
 class function TTreeSitterLoader.Load(const ALibPath: string): Boolean;
+label
+  Loaded;
 var
   LPath: string;
+  LExePath: string;
+  LSearchPaths: TArray<string>;
+  LS: string;
 
   function GetAddr(const AName: string): Pointer;
   begin
 {$IFDEF MSWINDOWS}
     Result := GetProcAddress(FLibHandle, PChar(AName));
 {$ELSE}
-    Result := dlsym(FLibHandle, PAnsiChar(AnsiString(AName)));
+    // Try both ways to be safe
+    Result := Pointer(NativeUInt(dlsym(NativeUInt(FLibHandle), PAnsiChar(AnsiString(AName)))));
 {$ENDIF}
+  end;
+
+  function TryLoad(const APath: string): Boolean;
+  begin
+{$IFDEF MSWINDOWS}
+    FLibHandle := LoadLibrary(PChar(APath));
+{$ELSE}
+    FLibHandle := THandle(NativeUInt(dlopen(PAnsiChar(AnsiString(APath)), RTLD_LAZY)));
+{$ENDIF}
+    Result := FLibHandle <> 0;
   end;
 
 begin
@@ -103,15 +119,30 @@ begin
   if LPath = '' then
     LPath := DefaultLibName;
 
-{$IFDEF MSWINDOWS}
-  FLibHandle := LoadLibrary(PChar(LPath));
+  if TryLoad(LPath) then
+    goto Loaded;
+
+  // Try relative to EXE
+  LExePath := ExtractFilePath(ParamStr(0));
+  SetLength(LSearchPaths, 4);
+  LSearchPaths[0] := LExePath + LPath;
+{$IFDEF WIN64}
+  LSearchPaths[1] := LExePath + '..\..\Libs\Win64\' + LPath;
+  LSearchPaths[2] := LExePath + '..\..\..\Libs\Win64\' + LPath;
+  LSearchPaths[3] := LExePath + 'Libs\Win64\' + LPath;
 {$ELSE}
-  FLibHandle := THandle(dlopen(PAnsiChar(AnsiString(LPath)), RTLD_LAZY));
+  LSearchPaths[1] := LExePath + '..\..\Libs\Win32\' + LPath;
+  LSearchPaths[2] := LExePath + '..\..\..\Libs\Win32\' + LPath;
+  LSearchPaths[3] := LExePath + 'Libs\Win32\' + LPath;
 {$ENDIF}
 
-  if FLibHandle = 0 then
-    Exit(False);
+  for LS in LSearchPaths do
+    if TryLoad(LS) then
+      goto Loaded;
 
+  Exit(False);
+
+Loaded:
   ts_parser_new := GetAddr('ts_parser_new');
   ts_parser_delete := GetAddr('ts_parser_delete');
   ts_parser_language := GetAddr('ts_parser_language');
@@ -200,7 +231,10 @@ begin
   ts_language_field_name_for_id := GetAddr('ts_language_field_name_for_id');
   ts_language_field_id_for_name := GetAddr('ts_language_field_id_for_name');
   ts_language_symbol_type := GetAddr('ts_language_symbol_type');
-  ts_language_version := GetAddr('ts_language_version');
+  // Renamed to ts_language_abi_version in tree-sitter >= 0.24
+  ts_language_version := GetAddr('ts_language_abi_version');
+  if not Assigned(ts_language_version) then
+    ts_language_version := GetAddr('ts_language_version');
   ts_language_next_state := GetAddr('ts_language_next_state');
   ts_set_allocator := GetAddr('ts_set_allocator');
 
@@ -211,12 +245,12 @@ end;
 
 class procedure TTreeSitterLoader.Unload;
 begin
-  if FLibHandle <> 0 then
+  if IsLoaded then
   begin
 {$IFDEF MSWINDOWS}
     FreeLibrary(FLibHandle);
 {$ELSE}
-    dlclose(Pointer(FLibHandle));
+    dlclose(NativeUInt(FLibHandle));
 {$ENDIF}
     FLibHandle := 0;
   end;

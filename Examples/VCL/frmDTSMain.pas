@@ -6,7 +6,7 @@ uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants,
   System.Classes, Vcl.Graphics, Vcl.Controls, Vcl.Forms, Vcl.Dialogs,
   Vcl.ExtCtrls, Vcl.ComCtrls, Vcl.StdCtrls, TreeSitter, TreeSitterLib,
-  TreeSitter.Loader, TreeSitter.Downloader, Vcl.Grids,
+  TreeSitter.App, Vcl.Grids,
   System.Actions, Vcl.ActnList, Vcl.Menus;
 
 type
@@ -82,8 +82,9 @@ type
     procedure btnQueryClick(Sender: TObject);
     procedure actNamedNodesOnlyExecute(Sender: TObject);
   private
-    FParser: TTSParser;
-    FTree: TTSTree;
+    FGrammarLoader: TTSGrammarLoader;
+    FAppManager: TTSAppManager;
+    FInitialized: Boolean;
     FEditChanged: Boolean;
     procedure ParseContent;
     procedure LoadLanguageParser(const ALangBaseName: string);
@@ -136,6 +137,7 @@ end;
 
 procedure TDTSMainForm.actGetChildByFieldUpdate(Sender: TObject);
 begin
+  if not FInitialized then begin actGetChildByField.Enabled := False; Exit; end;
   actGetChildByField.Enabled:= (not SelectedTSNode.IsNull) and
     (cbFields.ItemIndex >= 0);
 end;
@@ -154,6 +156,7 @@ end;
 
 procedure TDTSMainForm.actGotoFirstChildUpdate(Sender: TObject);
 begin
+  if not FInitialized then begin actGotoFirstChild.Enabled := False; Exit; end;
   if actNamedNodesOnly.Checked then
     actGotoFirstChild.Enabled:= SelectedTSNode.NamedChildCount > 0 else
     actGotoFirstChild.Enabled:= SelectedTSNode.ChildCount > 0;
@@ -168,6 +171,7 @@ end;
 
 procedure TDTSMainForm.actGotoNextSiblingUpdate(Sender: TObject);
 begin
+  if not FInitialized then begin actGotoNextSibling.Enabled := False; Exit; end;
   if actNamedNodesOnly.Checked then
     actGotoNextSibling.Enabled:= not SelectedTSNode.NextNamedSibling.IsNull else
     actGotoNextSibling.Enabled:= not SelectedTSNode.NextSibling.IsNull;
@@ -180,6 +184,7 @@ end;
 
 procedure TDTSMainForm.actGotoParentUpdate(Sender: TObject);
 begin
+  if not FInitialized then begin actGotoParent.Enabled := False; Exit; end;
   actGotoParent.Enabled:= not SelectedTSNode.Parent.IsNull;
 end;
 
@@ -192,6 +197,7 @@ end;
 
 procedure TDTSMainForm.actGotoPrevSiblingUpdate(Sender: TObject);
 begin
+  if not FInitialized then begin actGotoPrevSibling.Enabled := False; Exit; end;
   if actNamedNodesOnly.Checked then
     actGotoPrevSibling.Enabled:= not SelectedTSNode.PrevNamedSibling.IsNull else
     actGotoPrevSibling.Enabled:= not SelectedTSNode.PrevSibling.IsNull;
@@ -199,6 +205,7 @@ end;
 
 procedure TDTSMainForm.actGotoUpdate(Sender: TObject);
 begin
+  if not FInitialized then begin actGoto.Enabled := False; Exit; end;
   actGoto.Enabled:= not SelectedTSNode.IsNull;
 end;
 
@@ -207,10 +214,12 @@ var
   root, prevSelected: TTSNode;
   rootNode: TTSTreeViewNode;
 begin
+  if not Assigned(FAppManager) then Exit;
   prevSelected:= SelectedTSNode;
   try
     treeView.Items.Clear;
-    root:= FTree.RootNode;
+    if FAppManager.Tree = nil then Exit;
+    root:= FAppManager.Tree.RootNode;
     rootNode:= TTSTreeViewNode(treeView.Items.AddChild(nil, root.NodeType));
     SetupTreeTSNode(rootNode, root);
   finally
@@ -225,12 +234,14 @@ end;
 
 procedure TDTSMainForm.actShowNodeAsStringUpdate(Sender: TObject);
 begin
+  if not FInitialized then begin actShowNodeAsString.Enabled := False; Exit; end;
   actShowNodeAsString.Enabled:= not SelectedTSNode.IsNull;
 end;
 
 procedure TDTSMainForm.btnLangInfoClick(Sender: TObject);
 begin
-  ShowLanguageInfo(FParser.Language);
+  if Assigned(FAppManager) then
+    ShowLanguageInfo(FAppManager.Parser.Language);
 end;
 
 procedure TDTSMainForm.btnLoadClick(Sender: TObject);
@@ -239,61 +250,37 @@ begin
     Exit;
   memCode.Lines.LoadFromFile(OD.FileName);
   FEditChanged:= True;
-  ParseContent;
+  if Assigned(FAppManager) then
+    ParseContent;
 end;
 
 procedure TDTSMainForm.btnQueryClick(Sender: TObject);
 begin
-  ShowQueryForm(FTree);
+  if Assigned(FAppManager) then
+    ShowQueryForm(FAppManager.Tree);
 end;
 
 procedure TDTSMainForm.LoadLanguageParser(const ALangBaseName: string);
-//hard coded naming scheme
-//  DLL name: tree-sitter-<lang>
-//  method name returning TSLanguage: tree_sitter_<lang>
-//this could also be fed from e.g. an INI file or could be
-//hardcoded depending on the use-case
-var
-  tsLibName, tsAPIName: string;
-  libHandle: THandle;
-  pAPI: TTSGetLanguageFunc;
 begin
-  tsLibName:= Format('tree-sitter-%s', [ALangBaseName]) + TTreeSitterDownloader.GetPlatformExtension;
-  libHandle:= LoadLibrary(PChar(tsLibName));
-  if libHandle = 0 then
+  if Assigned(FAppManager) then
   begin
-    if MessageDlg(Format('Grammar library "%s" not found. Download it?', [tsLibName]), mtConfirmation, [mbYes, mbNo], 0) = mrYes then
-    begin
-      if not TTreeSitterDownloader.DownloadFile(TTreeSitterDownloader.GetGrammarURL(ALangBaseName), tsLibName) then
-        raise Exception.CreateFmt('Failed to download grammar library "%s".', [tsLibName]);
-      libHandle:= LoadLibrary(PChar(tsLibName));
-    end;
+    FAppManager.SetLanguage(ALangBaseName);
+    LoadLanguageFields;
   end;
-
-  if libHandle = 0 then
-    raise Exception.CreateFmt('Could not load library "%s"', [tsLibName]);
-  tsAPIName:= Format('tree_sitter_%s', [ALangBaseName]);
-  pAPI:= GetProcAddress(libHandle, PChar(tsAPIName));
-  if pAPI = nil then
-    raise Exception.CreateFmt('The library "%s" does not provide a method "%s"',
-      [tsLibName, tsAPIName]);
-  FParser.Reset;
-  FreeAndNil(FTree);
-  FParser.Language:= pAPI;
-  LoadLanguageFields;
 end;
 
 procedure TDTSMainForm.LoadLanguageFields;
 var
-  i: UInt32;
+  fields: TArray<TTSFieldInfo>;
+  field: TTSFieldInfo;
 begin
+  if not Assigned(FAppManager) then Exit;
   cbFields.Items.BeginUpdate;
   try
     cbFields.Items.Clear;
-    if FParser.Language = nil then
-      Exit;
-    for i:= 1 to FParser.Language^.FieldCount do
-      cbFields.Items.AddObject(FParser.Language^.FieldName[i], TObject(i));
+    fields := FAppManager.GetLanguageFields;
+    for field in fields do
+      cbFields.Items.AddObject(field.FieldName, TObject(field.FieldId));
   finally
     cbFields.Items.EndUpdate;
   end;
@@ -301,8 +288,11 @@ end;
 
 procedure TDTSMainForm.cbCodeChange(Sender: TObject);
 begin
-  LoadLanguageParser(cbCode.Items[cbCode.ItemIndex]);
-  ParseContent;
+  if cbCode.ItemIndex >= 0 then
+  begin
+    LoadLanguageParser(cbCode.Items[cbCode.ItemIndex]);
+    ParseContent;
+  end;
 end;
 
 procedure TDTSMainForm.ClearNodeProps;
@@ -315,6 +305,7 @@ end;
 
 procedure TDTSMainForm.FillNodeProps(const ANode: TTSNode);
 begin
+  if ANode.IsNull then Exit;
   sgNodeProps.Cells[1, Ord(rowSymbol)]:= Format('%d (%s)', [ANode.Symbol, ANode.Language^.SymbolName[ANode.Symbol]]);
   sgNodeProps.Cells[1, Ord(rowGrammarType)]:= ANode.GrammarType;
   sgNodeProps.Cells[1, Ord(rowGrammarSymbol)]:= Format('%d (%s)', [ANode.GrammarSymbol, ANode.Language^.SymbolName[ANode.GrammarSymbol]]);
@@ -336,40 +327,63 @@ procedure TDTSMainForm.FormCreate(Sender: TObject);
 var
   row: TSGNodePropRow;
 begin
-  if not TTreeSitterLoader.Load then
-  begin
-    if MessageDlg('Tree-sitter library not found. Download it?', mtConfirmation, [mbYes, mbNo], 0) = mrYes then
+  FGrammarLoader := TTSGrammarLoader.Create;
+  FGrammarLoader.OnConfirmDownload :=
+    function(const AMessage: string): Boolean
     begin
-      if not TTreeSitterDownloader.DownloadFile(TTreeSitterDownloader.GetCoreURL, TTreeSitterLoader.DefaultLibName) then
-        raise Exception.Create('Failed to download tree-sitter library.');
-      if not TTreeSitterLoader.Load then
-        raise Exception.Create('Failed to load tree-sitter library after download.');
-    end
-    else
-      raise Exception.Create('Tree-sitter library is required.');
+      Result := MessageDlg(AMessage, mtConfirmation, [mbYes, mbNo], 0) = mrYes;
+    end;
+  try
+    if not FGrammarLoader.EnsureCoreLoaded then
+    begin
+      MessageDlg(
+        'Tree-sitter core library not found and download was declined.' + #13#10 +
+        'Run Examples\BuildLibs.ps1 -Platforms Win32 to build the DLLs,' + #13#10 +
+        'then copy Libs\Win32\tree-sitter*.dll next to this executable.',
+        mtError, [mbOK], 0);
+      Close;
+      Exit;
+    end;
+
+    FAppManager := TTSAppManager.Create(FGrammarLoader);
+
+    //initialize property grid captions
+    sgNodeProps.RowCount:= Ord(High(TSGNodePropRow)) - Ord(Low(TSGNodePropRow)) + 1;
+    for row:= Low(TSGNodePropRow) to High(TSGNodePropRow) do
+      sgNodeProps.Cells[0, Ord(row)]:= sgNodePropCaptions[row];
+
+    cbCode.ItemIndex:= 0;
+    cbCodeChange(nil);
+    FInitialized := True;
+  except
+    on E: Exception do
+    begin
+      MessageDlg(
+        'Initialization error: ' + E.Message + #13#10#13#10 +
+        'Run Examples\BuildLibs.ps1 -Platforms Win32 to build the DLLs,' + #13#10 +
+        'then copy Libs\Win32\tree-sitter*.dll next to this executable.',
+        mtError, [mbOK], 0);
+      Close;
+    end;
   end;
-
-  //initialize property grid captions
-  sgNodeProps.RowCount:= Ord(High(TSGNodePropRow)) - Ord(Low(TSGNodePropRow)) + 1;
-  for row:= Low(TSGNodePropRow) to High(TSGNodePropRow) do
-    sgNodeProps.Cells[0, Ord(row)]:= sgNodePropCaptions[row];
-
-  FParser:= TTSParser.Create;
-  cbCode.ItemIndex:= 0;
-  cbCodeChange(nil);
 end;
 
 procedure TDTSMainForm.FormDestroy(Sender: TObject);
 begin
-  FreeAndNil(FTree);
-  FreeAndNil(FParser);
+  FreeAndNil(FAppManager);
+  FreeAndNil(FGrammarLoader);
 end;
 
 function TDTSMainForm.GetSelectedTSNode: TTSNode;
 begin
-  if treeView.Selected is TTSTreeViewNode then
-    Result:= TTSTreeViewNode(treeView.Selected).TSNode else
-    Result:= FTree.RootNode.Parent; //easy way to create a NULL node
+  if not FInitialized then
+    Exit(Default(TTSNode));
+  if (treeView.Selected is TTSTreeViewNode) then
+    Result:= TTSTreeViewNode(treeView.Selected).TSNode
+  else if Assigned(FAppManager) and (FAppManager.Tree <> nil) then
+    Result:= FAppManager.Tree.RootNode.Parent //easy way to create a NULL node
+  else
+    Result:= Default(TTSNode); //zero-initialized null node
 end;
 
 procedure TDTSMainForm.ParseContent;
@@ -378,22 +392,20 @@ var
   rootNode: TTSTreeViewNode;
   sCode: string;
 begin
+  if not Assigned(FAppManager) then
+    Exit;
   treeView.Items.Clear;
   sCode:= memCode.Lines.Text;
   if DTSQueryForm <> nil then
     DTSQueryForm.TreeDeleted;
-  FreeAndNil(FTree);
-  if Length(sCode) = 0 then
-    Exit; //avoid our own exception that empty string cannot be parsed
-  //we no longer pass OldTree as we would need to track editing and call
-  //ts_tree_edit
-  FTree:= FParser.ParseString(sCode);
-  root:= FTree.RootNode;
+  if not FAppManager.ParseSource(sCode) then
+    Exit;
+  root:= FAppManager.Tree.RootNode;
   rootNode:= TTSTreeViewNode(treeView.Items.AddChild(nil, root.NodeType));
   SetupTreeTSNode(rootNode, root);
   FEditChanged:= False;
   if DTSQueryForm <> nil then
-    DTSQueryForm.NewTreeGenerated(FTree);
+    DTSQueryForm.NewTreeGenerated(FAppManager.Tree);
 end;
 
 procedure TDTSMainForm.SetSelectedTSNode(const Value: TTSNode);

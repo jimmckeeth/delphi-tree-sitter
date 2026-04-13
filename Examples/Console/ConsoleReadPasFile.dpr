@@ -5,66 +5,62 @@ program ConsoleReadPasFile;
 {$R *.res}
 
 uses
-  Winapi.Windows,
-  Classes,
+  System.Classes,
   System.SysUtils,
-  IOUtils,
+  System.IOUtils,
   TreeSitter,
   TreeSitterLib,
-  TreeSitter.Loader;
-
-type
-  TTSGetLanguageFunc = function(): PTSLanguage; cdecl;
+  TreeSitter.Loader,
+  TreeSitter.App;
 
 procedure ReadAndParsePasFile(const AFileName: string);
 var
   parser: TTSParser;
   fs: TFileStream;
   tree: TTSTree;
-  libHandle: THandle;
-  pAPI: TTSGetLanguageFunc;
+  grammarLoader: TTSGrammarLoader;
+  pascalLang: PTSLanguage;
 begin
-  if not TTreeSitterLoader.Load then
-    raise Exception.Create('Failed to load tree-sitter core library');
-
-  libHandle := LoadLibrary('tree-sitter-pascal.dll');
-  if libHandle = 0 then
-    raise Exception.Create('Failed to load tree-sitter-pascal.dll');
-
-  pAPI := GetProcAddress(libHandle, 'tree_sitter_pascal');
-  if not Assigned(pAPI) then
-    raise Exception.Create('Failed to find tree_sitter_pascal function');
-
-  tree:= nil;
-  parser:= nil;
-  fs:= TFileStream.Create(AFileName, fmOpenRead or fmShareDenyNone);
+  grammarLoader := TTSGrammarLoader.Create;
   try
-    parser:= TTSParser.Create;
-    parser.Language:= pAPI;
-    tree:= parser.parse(
-      function (AByteIndex: UInt32; APosition: TTSPoint; var ABytesRead: UInt32): TBytes
-      const
-        BufSize = 10 * 1024;
-      begin
-        if fs.Seek(AByteIndex, soFromBeginning) < 0 then
-        begin
-          ABytesRead:= 0;
-          Exit;
-        end;
-        SetLength(Result, BufSize);
-        try
-          ABytesRead:= fs.Read(Result, BufSize);
-        except
-          ABytesRead:= 0;
-        end;
-        SetLength(Result, ABytesRead);
-      end, TTSInputEncoding.TSInputEncodingUTF8);
+    if not grammarLoader.EnsureCoreLoaded then
+      raise Exception.Create('Failed to load tree-sitter core library');
 
-    WriteLn(tree.RootNode.ToString);
+    pascalLang := grammarLoader.LoadGrammar('pascal');
+
+    tree:= nil;
+    parser:= nil;
+    fs:= TFileStream.Create(AFileName, fmOpenRead or fmShareDenyNone);
+    try
+      parser:= TTSParser.Create;
+      parser.Language:= pascalLang;
+      tree:= parser.parse(
+        function (AByteIndex: UInt32; APosition: TTSPoint; var ABytesRead: UInt32): TBytes
+        const
+          BufSize = 10 * 1024;
+        begin
+          if fs.Seek(AByteIndex, soFromBeginning) < 0 then
+          begin
+            ABytesRead:= 0;
+            Exit;
+          end;
+          SetLength(Result, BufSize);
+          try
+            ABytesRead:= fs.Read(Result, BufSize);
+          except
+            ABytesRead:= 0;
+          end;
+          SetLength(Result, ABytesRead);
+        end, TTSInputEncoding.TSInputEncodingUTF8);
+
+      WriteLn(tree.RootNode.ToString);
+    finally
+      tree.Free;
+      parser.Free;
+      fs.Free;
+    end;
   finally
-    tree.Free;
-    parser.Free;
-    fs.Free;
+    grammarLoader.Free;
   end;
 end;
 
