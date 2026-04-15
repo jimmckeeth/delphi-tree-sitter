@@ -31,6 +31,8 @@ type
     FGrammarLoader: TTSGrammarLoader;
     FAppManager: TTSAppManager;
     FEditChanged: Boolean;
+    function FindRepoRoot: string;
+    procedure LoadSampleForLanguage;
     procedure ParseContent;
     procedure FillTreeView;
     procedure FillNode(AParentItem: TTreeViewItem; const ANode: TTSNode);
@@ -62,10 +64,9 @@ begin
   end;
   FAppManager := TTSAppManager.Create(FGrammarLoader);
 
-  cbCode.Items.Add('pascal');
-  cbCode.Items.Add('c');
-  cbCode.Items.Add('cpp');
-  cbCode.Items.Add('proto');
+  cbCode.Items.Clear;
+  for var entry in FAppManager.Languages do
+    cbCode.Items.Add(entry.DisplayName);
   cbCode.ItemIndex := 0;
   cbCodeChange(nil); // Set default language first
 
@@ -77,6 +78,39 @@ begin
   end;
 end;
 
+function TDTSMainFormFMX.FindRepoRoot: string;
+var
+  i: Integer;
+begin
+  Result := ExtractFilePath(ParamStr(0));
+  for i := 1 to 5 do
+  begin
+    if TDirectory.Exists(TPath.Combine(Result, 'Source')) then
+      Exit;
+    Result := TPath.GetFullPath(TPath.Combine(Result, '..'));
+  end;
+  Result := '';
+end;
+
+procedure TDTSMainFormFMX.LoadSampleForLanguage;
+var
+  entry: TTSLanguageEntry;
+  samplePath: string;
+  repoRoot: string;
+begin
+  if cbCode.ItemIndex < 0 then Exit;
+  entry := FAppManager.Languages[cbCode.ItemIndex];
+  if entry.SampleFile = '' then Exit;
+  repoRoot := FindRepoRoot;
+  if repoRoot = '' then Exit;
+  samplePath := TPath.Combine(TPath.Combine(repoRoot, 'Examples' + PathDelim + 'Samples'), entry.SampleFile);
+  if TFile.Exists(samplePath) then
+  begin
+    memCode.Lines.LoadFromFile(samplePath);
+    FEditChanged := False;
+  end;
+end;
+
 procedure TDTSMainFormFMX.PopulateFiles;
 var
   LBaseDir: string;
@@ -84,39 +118,24 @@ var
   LPath: string;
   LFiles: TArray<string>;
   LFile: string;
-  i: Integer;
 begin
   cbFiles.Items.BeginUpdate;
   try
     cbFiles.Items.Clear;
-    
-    // Find project root by looking for "Source" folder up the tree
-    LBaseDir := ExtractFilePath(ParamStr(0));
-    for i := 1 to 5 do
-    begin
-      if TDirectory.Exists(TPath.Combine(LBaseDir, 'Source')) then
-        Break;
-      LBaseDir := TPath.GetFullPath(TPath.Combine(LBaseDir, '..'));
-    end;
+    LBaseDir := FindRepoRoot;
 
     LPaths := [
       TPath.Combine(LBaseDir, 'Source'),
       TPath.Combine(LBaseDir, 'Examples\FMX'),
-      TPath.Combine(LBaseDir, 'Examples\Shared')
+      TPath.Combine(LBaseDir, 'Examples\Shared'),
+      TPath.Combine(LBaseDir, 'Examples\Samples')
     ];
 
     for LPath in LPaths do
     begin
       if TDirectory.Exists(LPath) then
       begin
-        LFiles := TDirectory.GetFiles(LPath, '*', TSearchOption.soAllDirectories,
-          function(const Path: string; const SearchRec: TSearchRec): Boolean
-          var
-            LExt: string;
-          begin
-            LExt := ExtractFileExt(Path).ToLower;
-            Result := (LExt = '.pas') or (LExt = '.dpr') or (LExt = '.inc');
-          end);
+        LFiles := TDirectory.GetFiles(LPath, '*', TSearchOption.soAllDirectories);
         
         for LFile in LFiles do
           cbFiles.Items.Add(LFile);
@@ -145,9 +164,10 @@ end;
 
 procedure TDTSMainFormFMX.cbCodeChange(Sender: TObject);
 begin
-  if cbCode.Selected = nil then Exit;
+  if cbCode.ItemIndex < 0 then Exit;
   try
-    FAppManager.SetLanguage(cbCode.Selected.Text);
+    FAppManager.SetLanguage(FAppManager.Languages[cbCode.ItemIndex].BaseName);
+    LoadSampleForLanguage;
     ParseContent;
   except
     on E: Exception do
@@ -161,7 +181,7 @@ var
 begin
   OD := TOpenDialog.Create(Self);
   try
-    OD.Filter := 'Pascal files (*.pas;*.dpr;*.dpk)|*.pas;*.dpr;*.dpk|All files (*.*)|*.*';
+    OD.Filter := 'Source files (*.pas;*.dpr;*.dpk;*.c;*.h;*.cpp;*.py;*.ts;*.js;*.json)|*.pas;*.dpr;*.dpk;*.c;*.h;*.cpp;*.py;*.ts;*.js;*.json|All files (*.*)|*.*';
     if OD.Execute then
     begin
       memCode.Lines.LoadFromFile(OD.FileName);

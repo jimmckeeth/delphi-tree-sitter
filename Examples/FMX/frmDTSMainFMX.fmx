@@ -17,8 +17,8 @@ object DTSMainFormFMX: TDTSMainFormFMX
     Size.PlatformDefault = False
     TabOrder = 1
     object btnLoad: TButton
-      Position.X = 160.000000000000000000
-      Position.Y = 8.000000000000000000
+      Position.X = 8.000000000000000000
+      Position.Y = 10.000000000000000000
       TabOrder = 1
       Text = 'Load File'
       OnClick = btnLoadClick
@@ -26,14 +26,14 @@ object DTSMainFormFMX: TDTSMainFormFMX
     object cbCode: TComboBox
       Anchors = [akTop, akRight]
       Position.X = 532.000000000000000000
-      Position.Y = 8.000000000000000000
+      Position.Y = 10.000000000000000000
       TabOrder = 2
       OnChange = cbCodeChange
     end
     object Label1: TLabel
       Anchors = [akTop, akRight]
       Position.X = 456.000000000000000000
-      Position.Y = 10.000000000000000000
+      Position.Y = 13.000000000000000000
       Size.Width = 68.000000000000000000
       Size.Height = 17.000000000000000000
       Size.PlatformDefault = False
@@ -42,11 +42,12 @@ object DTSMainFormFMX: TDTSMainFormFMX
       TabOrder = 3
     end
     object cbFiles: TComboBox
+      Anchors = [akLeft, akTop, akRight]
       Items.Strings = (
         '')
-      Position.X = 8.000000000000000000
-      Position.Y = 9.000000000000000000
-      Size.Width = 144.000000000000000000
+      Position.X = 96.000000000000000000
+      Position.Y = 10.000000000000000000
+      Size.Width = 361.000000000000000000
       Size.Height = 22.000000000000000000
       Size.PlatformDefault = False
       TabOrder = 4

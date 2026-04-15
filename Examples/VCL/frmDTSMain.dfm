@@ -57,7 +57,7 @@ object DTSMainForm: TDTSMainForm
       Height = 15
       Caption = 'Code:'
     end
-    object Label1: TLabel
+    object lblFields: TLabel
       Left = 411
       Top = 17
       Width = 86
@@ -131,7 +131,7 @@ object DTSMainForm: TDTSMainForm
     Width = 250
     Height = 428
     Align = alRight
-    Caption = 'Panel1'
+    BevelOuter = bvNone
     TabOrder = 2
     object Splitter2: TSplitter
       Left = 1

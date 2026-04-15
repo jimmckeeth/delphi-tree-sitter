@@ -72,12 +72,20 @@ type
     property OnConfirmDownload: TTSConfirmDownloadFunc read FOnConfirmDownload write FOnConfirmDownload;
   end;
 
+  TTSLanguageEntry = record
+    BaseName: string;
+    DisplayName: string;
+    SampleFile: string;
+  end;
+
   TTSAppManager = class
   private
     FGrammarLoader: TTSGrammarLoader;
     FParser: TTSParser;
     FTree: TTSTree;
     FCurrentLanguage: string;
+    FLanguages: TList<TTSLanguageEntry>;
+    procedure InitLanguages;
   public
     constructor Create(AGrammarLoader: TTSGrammarLoader);
     destructor Destroy; override;
@@ -93,6 +101,7 @@ type
     property Parser: TTSParser read FParser;
     property Tree: TTSTree read FTree;
     property CurrentLanguage: string read FCurrentLanguage;
+    property Languages: TList<TTSLanguageEntry> read FLanguages;
   end;
 
 function BuildNodeDisplayText(const AInfo: TTSNodeInfo): string;
@@ -112,6 +121,11 @@ begin
   else
     Result := AInfo.NodeType;
 end;
+
+{ TTSGrammarLoader }
+// ... (omitted for brevity in replace call, will provide full implementation if needed, 
+// but replace requires full context or surgical match)
+
 
 { TTSGrammarLoader }
 
@@ -237,13 +251,36 @@ begin
   inherited Create;
   FGrammarLoader := AGrammarLoader;
   FParser := TTSParser.Create;
+  FLanguages := TList<TTSLanguageEntry>.Create;
+  InitLanguages;
 end;
 
 destructor TTSAppManager.Destroy;
 begin
+  FLanguages.Free;
   FreeAndNil(FTree);
   FreeAndNil(FParser);
   inherited;
+end;
+
+procedure TTSAppManager.InitLanguages;
+  procedure Add(const ABaseName, ADisplayName, ASample: string);
+  var
+    entry: TTSLanguageEntry;
+  begin
+    entry.BaseName := ABaseName;
+    entry.DisplayName := ADisplayName;
+    entry.SampleFile := ASample;
+    FLanguages.Add(entry);
+  end;
+begin
+  FLanguages.Clear;
+  Add('pascal', 'Pascal (Delphi/FPC)', 'modernDelphi.pas');
+  Add('c', 'C', 'sample.c');
+  Add('python', 'Python', 'sample.py');
+  Add('typescript', 'TypeScript', 'sample.ts');
+  Add('javascript', 'JavaScript', 'sample.js');
+  Add('json', 'JSON', 'sample.json');
 end;
 
 procedure TTSAppManager.SetLanguage(const ALangBaseName: string);

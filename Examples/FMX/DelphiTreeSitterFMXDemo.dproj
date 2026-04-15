@@ -2,7 +2,7 @@
     <PropertyGroup>
         <Base>True</Base>
         <AppType>Application</AppType>
-        <Config Condition="'$(Config)'==''">Release</Config>
+        <Config Condition="'$(Config)'==''">Debug</Config>
         <FrameworkType>FMX</FrameworkType>
         <MainSource>DelphiTreeSitterFMXDemo.dpr</MainSource>
         <Platform Condition="'$(Platform)'==''">Win64</Platform>

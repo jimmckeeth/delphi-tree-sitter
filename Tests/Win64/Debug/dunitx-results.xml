@@ -1,158 +1,32 @@
 ﻿<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
-<test-results name="C:\Users\jim\documents\Git\delphi-tree-sitter\Tests\Win64\Debug\TreeSitterTests.exe" total="98" errors="93" failures="0" ignored="0" inconclusive="0" not-run="0" skipped="0" invalid="0" date="2026-04-12" time="16:40:01">
+<test-results name="E:\jim\Documents\Git\delphi-tree-sitter\Tests\Win64\Debug\TreeSitterTests.exe" total="98" errors="0" failures="0" ignored="0" inconclusive="0" not-run="0" skipped="0" invalid="0" date="2026-04-14" time="23:01:18">
   <culture-info current-culture="en" current-uiculture="en" />
-  <test-suite type="Assembly" name="TreeSitterTests.exe" executed="true" result="Failure" success="False" time="16:40:01" asserts="0">
+  <test-suite type="Assembly" name="TreeSitterTests.exe" executed="true" result="Success" success="True" time="23:01:18" asserts="0">
     <results>
-        <test-suite type="Namespace" name="AppTests" executed="true" result="Success" success="True" time="0.136" asserts="0" >
+        <test-suite type="Namespace" name="AppTests" executed="true" result="Success" success="True" time="0.072" asserts="0" >
           <results>
-              <test-suite type="Fixture" name="TAppManagerTests" executed="True" result="Success" success="True" time="0.126" >
+              <test-suite type="Fixture" name="TAppManagerTests" executed="True" result="Success" success="True" time="0.066" >
                 <results>
-                  <test-case name="TestSetLanguage" executed="True" result="Error" success="False" time="0.000" asserts="0" >
-                    <failure>
-                      <message>
-                        <![CDATA[ Could not load library "tree-sitter-pascal.dll" ]]>
-                      </message>
-                      <stack-trace>
-                        <![CDATA[  ]]>
-                      </stack-trace>
-                    </failure>
-                  </test-case>
-                  <test-case name="TestParseSource" executed="True" result="Error" success="False" time="0.000" asserts="0" >
-                    <failure>
-                      <message>
-                        <![CDATA[ Could not load library "tree-sitter-pascal.dll" ]]>
-                      </message>
-                      <stack-trace>
-                        <![CDATA[  ]]>
-                      </stack-trace>
-                    </failure>
-                  </test-case>
-                  <test-case name="TestParseSource_Empty_ReturnsFalse" executed="True" result="Error" success="False" time="0.000" asserts="0" >
-                    <failure>
-                      <message>
-                        <![CDATA[ Could not load library "tree-sitter-pascal.dll" ]]>
-                      </message>
-                      <stack-trace>
-                        <![CDATA[  ]]>
-                      </stack-trace>
-                    </failure>
-                  </test-case>
-                  <test-case name="TestGetRootNodeInfo" executed="True" result="Error" success="False" time="0.000" asserts="0" >
-                    <failure>
-                      <message>
-                        <![CDATA[ Could not load library "tree-sitter-pascal.dll" ]]>
-                      </message>
-                      <stack-trace>
-                        <![CDATA[  ]]>
-                      </stack-trace>
-                    </failure>
-                  </test-case>
-                  <test-case name="TestGetChildNodes_All" executed="True" result="Error" success="False" time="0.000" asserts="0" >
-                    <failure>
-                      <message>
-                        <![CDATA[ Could not load library "tree-sitter-pascal.dll" ]]>
-                      </message>
-                      <stack-trace>
-                        <![CDATA[  ]]>
-                      </stack-trace>
-                    </failure>
-                  </test-case>
-                  <test-case name="TestGetChildNodes_NamedOnly" executed="True" result="Error" success="False" time="0.000" asserts="0" >
-                    <failure>
-                      <message>
-                        <![CDATA[ Could not load library "tree-sitter-pascal.dll" ]]>
-                      </message>
-                      <stack-trace>
-                        <![CDATA[  ]]>
-                      </stack-trace>
-                    </failure>
-                  </test-case>
-                  <test-case name="TestGetNodeProperties" executed="True" result="Error" success="False" time="0.000" asserts="0" >
-                    <failure>
-                      <message>
-                        <![CDATA[ Could not load library "tree-sitter-pascal.dll" ]]>
-                      </message>
-                      <stack-trace>
-                        <![CDATA[  ]]>
-                      </stack-trace>
-                    </failure>
-                  </test-case>
-                  <test-case name="TestGetLanguageFields" executed="True" result="Error" success="False" time="0.000" asserts="0" >
-                    <failure>
-                      <message>
-                        <![CDATA[ Could not load library "tree-sitter-pascal.dll" ]]>
-                      </message>
-                      <stack-trace>
-                        <![CDATA[  ]]>
-                      </stack-trace>
-                    </failure>
-                  </test-case>
-                  <test-case name="TestGetLanguageInfo" executed="True" result="Error" success="False" time="0.000" asserts="0" >
-                    <failure>
-                      <message>
-                        <![CDATA[ Could not load library "tree-sitter-pascal.dll" ]]>
-                      </message>
-                      <stack-trace>
-                        <![CDATA[  ]]>
-                      </stack-trace>
-                    </failure>
-                  </test-case>
-                  <test-case name="TestFindChildByField" executed="True" result="Error" success="False" time="0.000" asserts="0" >
-                    <failure>
-                      <message>
-                        <![CDATA[ Could not load library "tree-sitter-pascal.dll" ]]>
-                      </message>
-                      <stack-trace>
-                        <![CDATA[  ]]>
-                      </stack-trace>
-                    </failure>
-                  </test-case>
-                  <test-case name="TestCurrentLanguage" executed="True" result="Error" success="False" time="0.000" asserts="0" >
-                    <failure>
-                      <message>
-                        <![CDATA[ Could not load library "tree-sitter-pascal.dll" ]]>
-                      </message>
-                      <stack-trace>
-                        <![CDATA[  ]]>
-                      </stack-trace>
-                    </failure>
-                  </test-case>
-                  <test-case name="TestSetLanguage_Resets" executed="True" result="Error" success="False" time="0.000" asserts="0" >
-                    <failure>
-                      <message>
-                        <![CDATA[ Could not load library "tree-sitter-pascal.dll" ]]>
-                      </message>
-                      <stack-trace>
-                        <![CDATA[  ]]>
-                      </stack-trace>
-                    </failure>
-                  </test-case>
+                  <test-case name="TestSetLanguage" executed="True" result="Success" success="True" time="0.000" asserts="0" />
+                  <test-case name="TestParseSource" executed="True" result="Success" success="True" time="0.000" asserts="0" />
+                  <test-case name="TestParseSource_Empty_ReturnsFalse" executed="True" result="Success" success="True" time="0.000" asserts="0" />
+                  <test-case name="TestGetRootNodeInfo" executed="True" result="Success" success="True" time="0.000" asserts="0" />
+                  <test-case name="TestGetChildNodes_All" executed="True" result="Success" success="True" time="0.000" asserts="0" />
+                  <test-case name="TestGetChildNodes_NamedOnly" executed="True" result="Success" success="True" time="0.000" asserts="0" />
+                  <test-case name="TestGetNodeProperties" executed="True" result="Success" success="True" time="0.001" asserts="0" />
+                  <test-case name="TestGetLanguageFields" executed="True" result="Success" success="True" time="0.000" asserts="0" />
+                  <test-case name="TestGetLanguageInfo" executed="True" result="Success" success="True" time="0.000" asserts="0" />
+                  <test-case name="TestFindChildByField" executed="True" result="Success" success="True" time="0.000" asserts="0" />
+                  <test-case name="TestCurrentLanguage" executed="True" result="Success" success="True" time="0.000" asserts="0" />
+                  <test-case name="TestSetLanguage_Resets" executed="True" result="Success" success="True" time="0.000" asserts="0" />
                 </results>
               </test-suite>
-              <test-suite type="Fixture" name="TGrammarLoaderTests" executed="True" result="Success" success="True" time="0.008" >
+              <test-suite type="Fixture" name="TGrammarLoaderTests" executed="True" result="Success" success="True" time="0.006" >
                 <results>
                   <test-case name="TestEnsureCoreLoaded" executed="True" result="Success" success="True" time="0.000" asserts="0" />
-                  <test-case name="TestLoadGrammar_Pascal" executed="True" result="Error" success="False" time="0.003" asserts="0" >
-                    <failure>
-                      <message>
-                        <![CDATA[ Could not load library "tree-sitter-pascal.dll" ]]>
-                      </message>
-                      <stack-trace>
-                        <![CDATA[  ]]>
-                      </stack-trace>
-                    </failure>
-                  </test-case>
-                  <test-case name="TestLoadGrammar_Invalid_Raises" executed="True" result="Success" success="True" time="0.002" asserts="0" />
-                  <test-case name="TestGrammarCaching" executed="True" result="Error" success="False" time="0.003" asserts="0" >
-                    <failure>
-                      <message>
-                        <![CDATA[ Could not load library "tree-sitter-pascal.dll" ]]>
-                      </message>
-                      <stack-trace>
-                        <![CDATA[  ]]>
-                      </stack-trace>
-                    </failure>
-                  </test-case>
+                  <test-case name="TestLoadGrammar_Pascal" executed="True" result="Success" success="True" time="0.000" asserts="0" />
+                  <test-case name="TestLoadGrammar_Invalid_Raises" executed="True" result="Success" success="True" time="0.003" asserts="0" />
+                  <test-case name="TestGrammarCaching" executed="True" result="Success" success="True" time="0.000" asserts="0" />
                   <test-case name="TestConfirmDownloadCallback_NotCalled_WhenLoaded" executed="True" result="Success" success="True" time="0.000" asserts="0" />
                 </results>
               </test-suite>
@@ -164,824 +38,113 @@
               </test-suite>
           </results>
         </test-suite>
-        <test-suite type="Namespace" name="TreeSitterCoreTests" executed="true" result="Success" success="True" time="0.035" asserts="0" >
+        <test-suite type="Namespace" name="TreeSitterCoreTests" executed="true" result="Success" success="True" time="0.049" asserts="0" >
           <results>
-              <test-suite type="Fixture" name="TCursorTests" executed="True" result="Success" success="True" time="0.005" >
+              <test-suite type="Fixture" name="TCursorTests" executed="True" result="Success" success="True" time="0.007" >
                 <results>
-                  <test-case name="TestCreateFromNode" executed="True" result="Error" success="False" time="0.000" asserts="0" >
-                    <failure>
-                      <message>
-                        <![CDATA[ Expected [0] equals actual [0] Failed to load tree-sitter-pascal library ]]>
-                      </message>
-                      <stack-trace>
-                        <![CDATA[  ]]>
-                      </stack-trace>
-                    </failure>
-                  </test-case>
-                  <test-case name="TestCopyConstructor" executed="True" result="Error" success="False" time="0.000" asserts="0" >
-                    <failure>
-                      <message>
-                        <![CDATA[ Expected [0] equals actual [0] Failed to load tree-sitter-pascal library ]]>
-                      </message>
-                      <stack-trace>
-                        <![CDATA[  ]]>
-                      </stack-trace>
-                    </failure>
-                  </test-case>
-                  <test-case name="TestGotoFirstChild" executed="True" result="Error" success="False" time="0.000" asserts="0" >
-                    <failure>
-                      <message>
-                        <![CDATA[ Expected [0] equals actual [0] Failed to load tree-sitter-pascal library ]]>
-                      </message>
-                      <stack-trace>
-                        <![CDATA[  ]]>
-                      </stack-trace>
-                    </failure>
-                  </test-case>
-                  <test-case name="TestGotoLastChild" executed="True" result="Error" success="False" time="0.000" asserts="0" >
-                    <failure>
-                      <message>
-                        <![CDATA[ Expected [0] equals actual [0] Failed to load tree-sitter-pascal library ]]>
-                      </message>
-                      <stack-trace>
-                        <![CDATA[  ]]>
-                      </stack-trace>
-                    </failure>
-                  </test-case>
-                  <test-case name="TestGotoNextSibling" executed="True" result="Error" success="False" time="0.000" asserts="0" >
-                    <failure>
-                      <message>
-                        <![CDATA[ Expected [0] equals actual [0] Failed to load tree-sitter-pascal library ]]>
-                      </message>
-                      <stack-trace>
-                        <![CDATA[  ]]>
-                      </stack-trace>
-                    </failure>
-                  </test-case>
-                  <test-case name="TestGotoPrevSibling" executed="True" result="Error" success="False" time="0.000" asserts="0" >
-                    <failure>
-                      <message>
-                        <![CDATA[ Expected [0] equals actual [0] Failed to load tree-sitter-pascal library ]]>
-                      </message>
-                      <stack-trace>
-                        <![CDATA[  ]]>
-                      </stack-trace>
-                    </failure>
-                  </test-case>
-                  <test-case name="TestGotoParent" executed="True" result="Error" success="False" time="0.000" asserts="0" >
-                    <failure>
-                      <message>
-                        <![CDATA[ Expected [0] equals actual [0] Failed to load tree-sitter-pascal library ]]>
-                      </message>
-                      <stack-trace>
-                        <![CDATA[  ]]>
-                      </stack-trace>
-                    </failure>
-                  </test-case>
-                  <test-case name="TestGotoDescendant" executed="True" result="Error" success="False" time="0.000" asserts="0" >
-                    <failure>
-                      <message>
-                        <![CDATA[ Expected [0] equals actual [0] Failed to load tree-sitter-pascal library ]]>
-                      </message>
-                      <stack-trace>
-                        <![CDATA[  ]]>
-                      </stack-trace>
-                    </failure>
-                  </test-case>
-                  <test-case name="TestGotoFirstChildForByte" executed="True" result="Error" success="False" time="0.000" asserts="0" >
-                    <failure>
-                      <message>
-                        <![CDATA[ Expected [0] equals actual [0] Failed to load tree-sitter-pascal library ]]>
-                      </message>
-                      <stack-trace>
-                        <![CDATA[  ]]>
-                      </stack-trace>
-                    </failure>
-                  </test-case>
-                  <test-case name="TestCurrentNode" executed="True" result="Error" success="False" time="0.000" asserts="0" >
-                    <failure>
-                      <message>
-                        <![CDATA[ Expected [0] equals actual [0] Failed to load tree-sitter-pascal library ]]>
-                      </message>
-                      <stack-trace>
-                        <![CDATA[  ]]>
-                      </stack-trace>
-                    </failure>
-                  </test-case>
-                  <test-case name="TestCurrentFieldName" executed="True" result="Error" success="False" time="0.000" asserts="0" >
-                    <failure>
-                      <message>
-                        <![CDATA[ Expected [0] equals actual [0] Failed to load tree-sitter-pascal library ]]>
-                      </message>
-                      <stack-trace>
-                        <![CDATA[  ]]>
-                      </stack-trace>
-                    </failure>
-                  </test-case>
-                  <test-case name="TestCurrentFieldId" executed="True" result="Error" success="False" time="0.000" asserts="0" >
-                    <failure>
-                      <message>
-                        <![CDATA[ Expected [0] equals actual [0] Failed to load tree-sitter-pascal library ]]>
-                      </message>
-                      <stack-trace>
-                        <![CDATA[  ]]>
-                      </stack-trace>
-                    </failure>
-                  </test-case>
-                  <test-case name="TestCurrentDepth" executed="True" result="Error" success="False" time="0.000" asserts="0" >
-                    <failure>
-                      <message>
-                        <![CDATA[ Expected [0] equals actual [0] Failed to load tree-sitter-pascal library ]]>
-                      </message>
-                      <stack-trace>
-                        <![CDATA[  ]]>
-                      </stack-trace>
-                    </failure>
-                  </test-case>
-                  <test-case name="TestResetToNode" executed="True" result="Error" success="False" time="0.000" asserts="0" >
-                    <failure>
-                      <message>
-                        <![CDATA[ Expected [0] equals actual [0] Failed to load tree-sitter-pascal library ]]>
-                      </message>
-                      <stack-trace>
-                        <![CDATA[  ]]>
-                      </stack-trace>
-                    </failure>
-                  </test-case>
+                  <test-case name="TestCreateFromNode" executed="True" result="Success" success="True" time="0.000" asserts="0" />
+                  <test-case name="TestCopyConstructor" executed="True" result="Success" success="True" time="0.000" asserts="0" />
+                  <test-case name="TestGotoFirstChild" executed="True" result="Success" success="True" time="0.000" asserts="0" />
+                  <test-case name="TestGotoLastChild" executed="True" result="Success" success="True" time="0.000" asserts="0" />
+                  <test-case name="TestGotoNextSibling" executed="True" result="Success" success="True" time="0.000" asserts="0" />
+                  <test-case name="TestGotoPrevSibling" executed="True" result="Success" success="True" time="0.000" asserts="0" />
+                  <test-case name="TestGotoParent" executed="True" result="Success" success="True" time="0.000" asserts="0" />
+                  <test-case name="TestGotoDescendant" executed="True" result="Success" success="True" time="0.000" asserts="0" />
+                  <test-case name="TestGotoFirstChildForByte" executed="True" result="Success" success="True" time="0.000" asserts="0" />
+                  <test-case name="TestCurrentNode" executed="True" result="Success" success="True" time="0.000" asserts="0" />
+                  <test-case name="TestCurrentFieldName" executed="True" result="Success" success="True" time="0.000" asserts="0" />
+                  <test-case name="TestCurrentFieldId" executed="True" result="Success" success="True" time="0.000" asserts="0" />
+                  <test-case name="TestCurrentDepth" executed="True" result="Success" success="True" time="0.000" asserts="0" />
+                  <test-case name="TestResetToNode" executed="True" result="Success" success="True" time="0.000" asserts="0" />
                 </results>
               </test-suite>
-              <test-suite type="Fixture" name="TLanguageTests" executed="True" result="Success" success="True" time="0.005" >
+              <test-suite type="Fixture" name="TLanguageTests" executed="True" result="Success" success="True" time="0.002" >
                 <results>
-                  <test-case name="TestVersion" executed="True" result="Error" success="False" time="0.000" asserts="0" >
-                    <failure>
-                      <message>
-                        <![CDATA[ Expected [0] equals actual [0] Failed to load tree-sitter-pascal library ]]>
-                      </message>
-                      <stack-trace>
-                        <![CDATA[  ]]>
-                      </stack-trace>
-                    </failure>
-                  </test-case>
-                  <test-case name="TestFieldCount" executed="True" result="Error" success="False" time="0.000" asserts="0" >
-                    <failure>
-                      <message>
-                        <![CDATA[ Expected [0] equals actual [0] Failed to load tree-sitter-pascal library ]]>
-                      </message>
-                      <stack-trace>
-                        <![CDATA[  ]]>
-                      </stack-trace>
-                    </failure>
-                  </test-case>
-                  <test-case name="TestSymbolCount" executed="True" result="Error" success="False" time="0.000" asserts="0" >
-                    <failure>
-                      <message>
-                        <![CDATA[ Expected [0] equals actual [0] Failed to load tree-sitter-pascal library ]]>
-                      </message>
-                      <stack-trace>
-                        <![CDATA[  ]]>
-                      </stack-trace>
-                    </failure>
-                  </test-case>
-                  <test-case name="TestFieldName" executed="True" result="Error" success="False" time="0.000" asserts="0" >
-                    <failure>
-                      <message>
-                        <![CDATA[ Expected [0] equals actual [0] Failed to load tree-sitter-pascal library ]]>
-                      </message>
-                      <stack-trace>
-                        <![CDATA[  ]]>
-                      </stack-trace>
-                    </failure>
-                  </test-case>
-                  <test-case name="TestFieldId" executed="True" result="Error" success="False" time="0.000" asserts="0" >
-                    <failure>
-                      <message>
-                        <![CDATA[ Expected [0] equals actual [0] Failed to load tree-sitter-pascal library ]]>
-                      </message>
-                      <stack-trace>
-                        <![CDATA[  ]]>
-                      </stack-trace>
-                    </failure>
-                  </test-case>
-                  <test-case name="TestSymbolName" executed="True" result="Error" success="False" time="0.000" asserts="0" >
-                    <failure>
-                      <message>
-                        <![CDATA[ Expected [0] equals actual [0] Failed to load tree-sitter-pascal library ]]>
-                      </message>
-                      <stack-trace>
-                        <![CDATA[  ]]>
-                      </stack-trace>
-                    </failure>
-                  </test-case>
-                  <test-case name="TestSymbolForName" executed="True" result="Error" success="False" time="0.000" asserts="0" >
-                    <failure>
-                      <message>
-                        <![CDATA[ Expected [0] equals actual [0] Failed to load tree-sitter-pascal library ]]>
-                      </message>
-                      <stack-trace>
-                        <![CDATA[  ]]>
-                      </stack-trace>
-                    </failure>
-                  </test-case>
-                  <test-case name="TestSymbolType" executed="True" result="Error" success="False" time="0.000" asserts="0" >
-                    <failure>
-                      <message>
-                        <![CDATA[ Expected [0] equals actual [0] Failed to load tree-sitter-pascal library ]]>
-                      </message>
-                      <stack-trace>
-                        <![CDATA[  ]]>
-                      </stack-trace>
-                    </failure>
-                  </test-case>
+                  <test-case name="TestVersion" executed="True" result="Success" success="True" time="0.000" asserts="0" />
+                  <test-case name="TestFieldCount" executed="True" result="Success" success="True" time="0.000" asserts="0" />
+                  <test-case name="TestSymbolCount" executed="True" result="Success" success="True" time="0.000" asserts="0" />
+                  <test-case name="TestFieldName" executed="True" result="Success" success="True" time="0.000" asserts="0" />
+                  <test-case name="TestFieldId" executed="True" result="Success" success="True" time="0.000" asserts="0" />
+                  <test-case name="TestSymbolName" executed="True" result="Success" success="True" time="0.000" asserts="0" />
+                  <test-case name="TestSymbolForName" executed="True" result="Success" success="True" time="0.000" asserts="0" />
+                  <test-case name="TestSymbolType" executed="True" result="Success" success="True" time="0.000" asserts="0" />
                 </results>
               </test-suite>
-              <test-suite type="Fixture" name="TLoaderTests" executed="True" result="Success" success="True" time="0.003" >
+              <test-suite type="Fixture" name="TLoaderTests" executed="True" result="Success" success="True" time="0.002" >
                 <results>
-                  <test-case name="TestLoadReturnsTrue" executed="True" result="Error" success="False" time="0.000" asserts="0" >
-                    <failure>
-                      <message>
-                        <![CDATA[ Expected [0] equals actual [0] Failed to load tree-sitter-pascal library ]]>
-                      </message>
-                      <stack-trace>
-                        <![CDATA[  ]]>
-                      </stack-trace>
-                    </failure>
-                  </test-case>
-                  <test-case name="TestIsLoadedAfterLoad" executed="True" result="Error" success="False" time="0.000" asserts="0" >
-                    <failure>
-                      <message>
-                        <![CDATA[ Expected [0] equals actual [0] Failed to load tree-sitter-pascal library ]]>
-                      </message>
-                      <stack-trace>
-                        <![CDATA[  ]]>
-                      </stack-trace>
-                    </failure>
-                  </test-case>
-                  <test-case name="TestDefaultLibName" executed="True" result="Error" success="False" time="0.000" asserts="0" >
-                    <failure>
-                      <message>
-                        <![CDATA[ Expected [0] equals actual [0] Failed to load tree-sitter-pascal library ]]>
-                      </message>
-                      <stack-trace>
-                        <![CDATA[  ]]>
-                      </stack-trace>
-                    </failure>
-                  </test-case>
-                  <test-case name="TestUnloadAndReload" executed="True" result="Error" success="False" time="0.000" asserts="0" >
-                    <failure>
-                      <message>
-                        <![CDATA[ Expected [0] equals actual [0] Failed to load tree-sitter-pascal library ]]>
-                      </message>
-                      <stack-trace>
-                        <![CDATA[  ]]>
-                      </stack-trace>
-                    </failure>
-                  </test-case>
+                  <test-case name="TestLoadReturnsTrue" executed="True" result="Success" success="True" time="0.000" asserts="0" />
+                  <test-case name="TestIsLoadedAfterLoad" executed="True" result="Success" success="True" time="0.000" asserts="0" />
+                  <test-case name="TestDefaultLibName" executed="True" result="Success" success="True" time="0.000" asserts="0" />
+                  <test-case name="TestUnloadAndReload" executed="True" result="Success" success="True" time="0.001" asserts="0" />
                 </results>
               </test-suite>
-              <test-suite type="Fixture" name="TNodeTests" executed="True" result="Success" success="True" time="0.009" >
+              <test-suite type="Fixture" name="TNodeTests" executed="True" result="Success" success="True" time="0.015" >
                 <results>
-                  <test-case name="TestNodeType" executed="True" result="Error" success="False" time="0.000" asserts="0" >
-                    <failure>
-                      <message>
-                        <![CDATA[ Expected [0] equals actual [0] Failed to load tree-sitter-pascal library ]]>
-                      </message>
-                      <stack-trace>
-                        <![CDATA[  ]]>
-                      </stack-trace>
-                    </failure>
-                  </test-case>
-                  <test-case name="TestSymbol" executed="True" result="Error" success="False" time="0.000" asserts="0" >
-                    <failure>
-                      <message>
-                        <![CDATA[ Expected [0] equals actual [0] Failed to load tree-sitter-pascal library ]]>
-                      </message>
-                      <stack-trace>
-                        <![CDATA[  ]]>
-                      </stack-trace>
-                    </failure>
-                  </test-case>
-                  <test-case name="TestGrammarType" executed="True" result="Error" success="False" time="0.000" asserts="0" >
-                    <failure>
-                      <message>
-                        <![CDATA[ Expected [0] equals actual [0] Failed to load tree-sitter-pascal library ]]>
-                      </message>
-                      <stack-trace>
-                        <![CDATA[  ]]>
-                      </stack-trace>
-                    </failure>
-                  </test-case>
-                  <test-case name="TestGrammarSymbol" executed="True" result="Error" success="False" time="0.000" asserts="0" >
-                    <failure>
-                      <message>
-                        <![CDATA[ Expected [0] equals actual [0] Failed to load tree-sitter-pascal library ]]>
-                      </message>
-                      <stack-trace>
-                        <![CDATA[  ]]>
-                      </stack-trace>
-                    </failure>
-                  </test-case>
-                  <test-case name="TestIsNull_False" executed="True" result="Error" success="False" time="0.000" asserts="0" >
-                    <failure>
-                      <message>
-                        <![CDATA[ Expected [0] equals actual [0] Failed to load tree-sitter-pascal library ]]>
-                      </message>
-                      <stack-trace>
-                        <![CDATA[  ]]>
-                      </stack-trace>
-                    </failure>
-                  </test-case>
-                  <test-case name="TestIsNamed" executed="True" result="Error" success="False" time="0.000" asserts="0" >
-                    <failure>
-                      <message>
-                        <![CDATA[ Expected [0] equals actual [0] Failed to load tree-sitter-pascal library ]]>
-                      </message>
-                      <stack-trace>
-                        <![CDATA[  ]]>
-                      </stack-trace>
-                    </failure>
-                  </test-case>
-                  <test-case name="TestIsError_NoError" executed="True" result="Error" success="False" time="0.000" asserts="0" >
-                    <failure>
-                      <message>
-                        <![CDATA[ Expected [0] equals actual [0] Failed to load tree-sitter-pascal library ]]>
-                      </message>
-                      <stack-trace>
-                        <![CDATA[  ]]>
-                      </stack-trace>
-                    </failure>
-                  </test-case>
-                  <test-case name="TestHasError_NoError" executed="True" result="Error" success="False" time="0.000" asserts="0" >
-                    <failure>
-                      <message>
-                        <![CDATA[ Expected [0] equals actual [0] Failed to load tree-sitter-pascal library ]]>
-                      </message>
-                      <stack-trace>
-                        <![CDATA[  ]]>
-                      </stack-trace>
-                    </failure>
-                  </test-case>
-                  <test-case name="TestIsExtra" executed="True" result="Error" success="False" time="0.000" asserts="0" >
-                    <failure>
-                      <message>
-                        <![CDATA[ Expected [0] equals actual [0] Failed to load tree-sitter-pascal library ]]>
-                      </message>
-                      <stack-trace>
-                        <![CDATA[  ]]>
-                      </stack-trace>
-                    </failure>
-                  </test-case>
-                  <test-case name="TestIsMissing" executed="True" result="Error" success="False" time="0.000" asserts="0" >
-                    <failure>
-                      <message>
-                        <![CDATA[ Expected [0] equals actual [0] Failed to load tree-sitter-pascal library ]]>
-                      </message>
-                      <stack-trace>
-                        <![CDATA[  ]]>
-                      </stack-trace>
-                    </failure>
-                  </test-case>
-                  <test-case name="TestParent" executed="True" result="Error" success="False" time="0.000" asserts="0" >
-                    <failure>
-                      <message>
-                        <![CDATA[ Expected [0] equals actual [0] Failed to load tree-sitter-pascal library ]]>
-                      </message>
-                      <stack-trace>
-                        <![CDATA[  ]]>
-                      </stack-trace>
-                    </failure>
-                  </test-case>
-                  <test-case name="TestChildCount" executed="True" result="Error" success="False" time="0.000" asserts="0" >
-                    <failure>
-                      <message>
-                        <![CDATA[ Expected [0] equals actual [0] Failed to load tree-sitter-pascal library ]]>
-                      </message>
-                      <stack-trace>
-                        <![CDATA[  ]]>
-                      </stack-trace>
-                    </failure>
-                  </test-case>
-                  <test-case name="TestChild" executed="True" result="Error" success="False" time="0.000" asserts="0" >
-                    <failure>
-                      <message>
-                        <![CDATA[ Expected [0] equals actual [0] Failed to load tree-sitter-pascal library ]]>
-                      </message>
-                      <stack-trace>
-                        <![CDATA[  ]]>
-                      </stack-trace>
-                    </failure>
-                  </test-case>
-                  <test-case name="TestNamedChild" executed="True" result="Error" success="False" time="0.000" asserts="0" >
-                    <failure>
-                      <message>
-                        <![CDATA[ Expected [0] equals actual [0] Failed to load tree-sitter-pascal library ]]>
-                      </message>
-                      <stack-trace>
-                        <![CDATA[  ]]>
-                      </stack-trace>
-                    </failure>
-                  </test-case>
-                  <test-case name="TestNamedChildCount" executed="True" result="Error" success="False" time="0.000" asserts="0" >
-                    <failure>
-                      <message>
-                        <![CDATA[ Expected [0] equals actual [0] Failed to load tree-sitter-pascal library ]]>
-                      </message>
-                      <stack-trace>
-                        <![CDATA[  ]]>
-                      </stack-trace>
-                    </failure>
-                  </test-case>
-                  <test-case name="TestNextSibling" executed="True" result="Error" success="False" time="0.000" asserts="0" >
-                    <failure>
-                      <message>
-                        <![CDATA[ Expected [0] equals actual [0] Failed to load tree-sitter-pascal library ]]>
-                      </message>
-                      <stack-trace>
-                        <![CDATA[  ]]>
-                      </stack-trace>
-                    </failure>
-                  </test-case>
-                  <test-case name="TestPrevSibling" executed="True" result="Error" success="False" time="0.000" asserts="0" >
-                    <failure>
-                      <message>
-                        <![CDATA[ Expected [0] equals actual [0] Failed to load tree-sitter-pascal library ]]>
-                      </message>
-                      <stack-trace>
-                        <![CDATA[  ]]>
-                      </stack-trace>
-                    </failure>
-                  </test-case>
-                  <test-case name="TestNextNamedSibling" executed="True" result="Error" success="False" time="0.000" asserts="0" >
-                    <failure>
-                      <message>
-                        <![CDATA[ Expected [0] equals actual [0] Failed to load tree-sitter-pascal library ]]>
-                      </message>
-                      <stack-trace>
-                        <![CDATA[  ]]>
-                      </stack-trace>
-                    </failure>
-                  </test-case>
-                  <test-case name="TestPrevNamedSibling" executed="True" result="Error" success="False" time="0.000" asserts="0" >
-                    <failure>
-                      <message>
-                        <![CDATA[ Expected [0] equals actual [0] Failed to load tree-sitter-pascal library ]]>
-                      </message>
-                      <stack-trace>
-                        <![CDATA[  ]]>
-                      </stack-trace>
-                    </failure>
-                  </test-case>
-                  <test-case name="TestChildByFieldName" executed="True" result="Error" success="False" time="0.000" asserts="0" >
-                    <failure>
-                      <message>
-                        <![CDATA[ Expected [0] equals actual [0] Failed to load tree-sitter-pascal library ]]>
-                      </message>
-                      <stack-trace>
-                        <![CDATA[  ]]>
-                      </stack-trace>
-                    </failure>
-                  </test-case>
-                  <test-case name="TestChildByFieldId" executed="True" result="Error" success="False" time="0.000" asserts="0" >
-                    <failure>
-                      <message>
-                        <![CDATA[ Expected [0] equals actual [0] Failed to load tree-sitter-pascal library ]]>
-                      </message>
-                      <stack-trace>
-                        <![CDATA[  ]]>
-                      </stack-trace>
-                    </failure>
-                  </test-case>
-                  <test-case name="TestStartByte" executed="True" result="Error" success="False" time="0.000" asserts="0" >
-                    <failure>
-                      <message>
-                        <![CDATA[ Expected [0] equals actual [0] Failed to load tree-sitter-pascal library ]]>
-                      </message>
-                      <stack-trace>
-                        <![CDATA[  ]]>
-                      </stack-trace>
-                    </failure>
-                  </test-case>
-                  <test-case name="TestEndByte" executed="True" result="Error" success="False" time="0.000" asserts="0" >
-                    <failure>
-                      <message>
-                        <![CDATA[ Expected [0] equals actual [0] Failed to load tree-sitter-pascal library ]]>
-                      </message>
-                      <stack-trace>
-                        <![CDATA[  ]]>
-                      </stack-trace>
-                    </failure>
-                  </test-case>
-                  <test-case name="TestStartPoint" executed="True" result="Error" success="False" time="0.000" asserts="0" >
-                    <failure>
-                      <message>
-                        <![CDATA[ Expected [0] equals actual [0] Failed to load tree-sitter-pascal library ]]>
-                      </message>
-                      <stack-trace>
-                        <![CDATA[  ]]>
-                      </stack-trace>
-                    </failure>
-                  </test-case>
-                  <test-case name="TestEndPoint" executed="True" result="Error" success="False" time="0.000" asserts="0" >
-                    <failure>
-                      <message>
-                        <![CDATA[ Expected [0] equals actual [0] Failed to load tree-sitter-pascal library ]]>
-                      </message>
-                      <stack-trace>
-                        <![CDATA[  ]]>
-                      </stack-trace>
-                    </failure>
-                  </test-case>
-                  <test-case name="TestDescendantCount" executed="True" result="Error" success="False" time="0.000" asserts="0" >
-                    <failure>
-                      <message>
-                        <![CDATA[ Expected [0] equals actual [0] Failed to load tree-sitter-pascal library ]]>
-                      </message>
-                      <stack-trace>
-                        <![CDATA[  ]]>
-                      </stack-trace>
-                    </failure>
-                  </test-case>
-                  <test-case name="TestToString" executed="True" result="Error" success="False" time="0.000" asserts="0" >
-                    <failure>
-                      <message>
-                        <![CDATA[ Expected [0] equals actual [0] Failed to load tree-sitter-pascal library ]]>
-                      </message>
-                      <stack-trace>
-                        <![CDATA[  ]]>
-                      </stack-trace>
-                    </failure>
-                  </test-case>
-                  <test-case name="TestEqual" executed="True" result="Error" success="False" time="0.000" asserts="0" >
-                    <failure>
-                      <message>
-                        <![CDATA[ Expected [0] equals actual [0] Failed to load tree-sitter-pascal library ]]>
-                      </message>
-                      <stack-trace>
-                        <![CDATA[  ]]>
-                      </stack-trace>
-                    </failure>
-                  </test-case>
+                  <test-case name="TestNodeType" executed="True" result="Success" success="True" time="0.000" asserts="0" />
+                  <test-case name="TestSymbol" executed="True" result="Success" success="True" time="0.000" asserts="0" />
+                  <test-case name="TestGrammarType" executed="True" result="Success" success="True" time="0.000" asserts="0" />
+                  <test-case name="TestGrammarSymbol" executed="True" result="Success" success="True" time="0.000" asserts="0" />
+                  <test-case name="TestIsNull_False" executed="True" result="Success" success="True" time="0.000" asserts="0" />
+                  <test-case name="TestIsNamed" executed="True" result="Success" success="True" time="0.000" asserts="0" />
+                  <test-case name="TestIsError_NoError" executed="True" result="Success" success="True" time="0.000" asserts="0" />
+                  <test-case name="TestHasError_NoError" executed="True" result="Success" success="True" time="0.000" asserts="0" />
+                  <test-case name="TestIsExtra" executed="True" result="Success" success="True" time="0.000" asserts="0" />
+                  <test-case name="TestIsMissing" executed="True" result="Success" success="True" time="0.000" asserts="0" />
+                  <test-case name="TestParent" executed="True" result="Success" success="True" time="0.000" asserts="0" />
+                  <test-case name="TestChildCount" executed="True" result="Success" success="True" time="0.000" asserts="0" />
+                  <test-case name="TestChild" executed="True" result="Success" success="True" time="0.000" asserts="0" />
+                  <test-case name="TestNamedChild" executed="True" result="Success" success="True" time="0.000" asserts="0" />
+                  <test-case name="TestNamedChildCount" executed="True" result="Success" success="True" time="0.000" asserts="0" />
+                  <test-case name="TestNextSibling" executed="True" result="Success" success="True" time="0.001" asserts="0" />
+                  <test-case name="TestPrevSibling" executed="True" result="Success" success="True" time="0.000" asserts="0" />
+                  <test-case name="TestNextNamedSibling" executed="True" result="Success" success="True" time="0.000" asserts="0" />
+                  <test-case name="TestPrevNamedSibling" executed="True" result="Success" success="True" time="0.000" asserts="0" />
+                  <test-case name="TestChildByFieldName" executed="True" result="Success" success="True" time="0.000" asserts="0" />
+                  <test-case name="TestChildByFieldId" executed="True" result="Success" success="True" time="0.000" asserts="0" />
+                  <test-case name="TestStartByte" executed="True" result="Success" success="True" time="0.000" asserts="0" />
+                  <test-case name="TestEndByte" executed="True" result="Success" success="True" time="0.000" asserts="0" />
+                  <test-case name="TestStartPoint" executed="True" result="Success" success="True" time="0.000" asserts="0" />
+                  <test-case name="TestEndPoint" executed="True" result="Success" success="True" time="0.000" asserts="0" />
+                  <test-case name="TestDescendantCount" executed="True" result="Success" success="True" time="0.000" asserts="0" />
+                  <test-case name="TestToString" executed="True" result="Success" success="True" time="0.000" asserts="0" />
+                  <test-case name="TestEqual" executed="True" result="Success" success="True" time="0.000" asserts="0" />
                 </results>
               </test-suite>
-              <test-suite type="Fixture" name="TParserTests" executed="True" result="Success" success="True" time="0.004" >
+              <test-suite type="Fixture" name="TParserTests" executed="True" result="Success" success="True" time="0.002" >
                 <results>
-                  <test-case name="TestCreateParser" executed="True" result="Error" success="False" time="0.000" asserts="0" >
-                    <failure>
-                      <message>
-                        <![CDATA[ Expected [0] equals actual [0] Failed to load tree-sitter-pascal library ]]>
-                      </message>
-                      <stack-trace>
-                        <![CDATA[  ]]>
-                      </stack-trace>
-                    </failure>
-                  </test-case>
-                  <test-case name="TestSetLanguage" executed="True" result="Error" success="False" time="0.000" asserts="0" >
-                    <failure>
-                      <message>
-                        <![CDATA[ Expected [0] equals actual [0] Failed to load tree-sitter-pascal library ]]>
-                      </message>
-                      <stack-trace>
-                        <![CDATA[  ]]>
-                      </stack-trace>
-                    </failure>
-                  </test-case>
-                  <test-case name="TestGetLanguage" executed="True" result="Error" success="False" time="0.000" asserts="0" >
-                    <failure>
-                      <message>
-                        <![CDATA[ Expected [0] equals actual [0] Failed to load tree-sitter-pascal library ]]>
-                      </message>
-                      <stack-trace>
-                        <![CDATA[  ]]>
-                      </stack-trace>
-                    </failure>
-                  </test-case>
-                  <test-case name="TestParseString_Simple" executed="True" result="Error" success="False" time="0.000" asserts="0" >
-                    <failure>
-                      <message>
-                        <![CDATA[ Expected [0] equals actual [0] Failed to load tree-sitter-pascal library ]]>
-                      </message>
-                      <stack-trace>
-                        <![CDATA[  ]]>
-                      </stack-trace>
-                    </failure>
-                  </test-case>
-                  <test-case name="TestParseString_Empty_Raises" executed="True" result="Error" success="False" time="0.000" asserts="0" >
-                    <failure>
-                      <message>
-                        <![CDATA[ Expected [0] equals actual [0] Failed to load tree-sitter-pascal library ]]>
-                      </message>
-                      <stack-trace>
-                        <![CDATA[  ]]>
-                      </stack-trace>
-                    </failure>
-                  </test-case>
-                  <test-case name="TestParseString_Unicode" executed="True" result="Error" success="False" time="0.000" asserts="0" >
-                    <failure>
-                      <message>
-                        <![CDATA[ Expected [0] equals actual [0] Failed to load tree-sitter-pascal library ]]>
-                      </message>
-                      <stack-trace>
-                        <![CDATA[  ]]>
-                      </stack-trace>
-                    </failure>
-                  </test-case>
-                  <test-case name="TestParseString_WithOldTree" executed="True" result="Error" success="False" time="0.000" asserts="0" >
-                    <failure>
-                      <message>
-                        <![CDATA[ Expected [0] equals actual [0] Failed to load tree-sitter-pascal library ]]>
-                      </message>
-                      <stack-trace>
-                        <![CDATA[  ]]>
-                      </stack-trace>
-                    </failure>
-                  </test-case>
-                  <test-case name="TestParse_WithCallback" executed="True" result="Error" success="False" time="0.000" asserts="0" >
-                    <failure>
-                      <message>
-                        <![CDATA[ Expected [0] equals actual [0] Failed to load tree-sitter-pascal library ]]>
-                      </message>
-                      <stack-trace>
-                        <![CDATA[  ]]>
-                      </stack-trace>
-                    </failure>
-                  </test-case>
-                  <test-case name="TestReset" executed="True" result="Error" success="False" time="0.000" asserts="0" >
-                    <failure>
-                      <message>
-                        <![CDATA[ Expected [0] equals actual [0] Failed to load tree-sitter-pascal library ]]>
-                      </message>
-                      <stack-trace>
-                        <![CDATA[  ]]>
-                      </stack-trace>
-                    </failure>
-                  </test-case>
+                  <test-case name="TestCreateParser" executed="True" result="Success" success="True" time="0.000" asserts="0" />
+                  <test-case name="TestSetLanguage" executed="True" result="Success" success="True" time="0.000" asserts="0" />
+                  <test-case name="TestGetLanguage" executed="True" result="Success" success="True" time="0.000" asserts="0" />
+                  <test-case name="TestParseString_Simple" executed="True" result="Success" success="True" time="0.000" asserts="0" />
+                  <test-case name="TestParseString_Empty_Raises" executed="True" result="Success" success="True" time="0.000" asserts="0" />
+                  <test-case name="TestParseString_Unicode" executed="True" result="Success" success="True" time="0.000" asserts="0" />
+                  <test-case name="TestParseString_WithOldTree" executed="True" result="Success" success="True" time="0.000" asserts="0" />
+                  <test-case name="TestParse_WithCallback" executed="True" result="Success" success="True" time="0.000" asserts="0" />
+                  <test-case name="TestReset" executed="True" result="Success" success="True" time="0.000" asserts="0" />
                 </results>
               </test-suite>
-              <test-suite type="Fixture" name="TQueryTests" executed="True" result="Success" success="True" time="0.005" >
+              <test-suite type="Fixture" name="TQueryTests" executed="True" result="Success" success="True" time="0.019" >
                 <results>
-                  <test-case name="TestCreateValidQuery" executed="True" result="Error" success="False" time="0.000" asserts="0" >
-                    <failure>
-                      <message>
-                        <![CDATA[ Expected [0] equals actual [0] Failed to load tree-sitter-pascal library ]]>
-                      </message>
-                      <stack-trace>
-                        <![CDATA[  ]]>
-                      </stack-trace>
-                    </failure>
-                  </test-case>
-                  <test-case name="TestCreateInvalidQuery_ErrorOffset" executed="True" result="Error" success="False" time="0.000" asserts="0" >
-                    <failure>
-                      <message>
-                        <![CDATA[ Expected [0] equals actual [0] Failed to load tree-sitter-pascal library ]]>
-                      </message>
-                      <stack-trace>
-                        <![CDATA[  ]]>
-                      </stack-trace>
-                    </failure>
-                  </test-case>
-                  <test-case name="TestPatternCount" executed="True" result="Error" success="False" time="0.000" asserts="0" >
-                    <failure>
-                      <message>
-                        <![CDATA[ Expected [0] equals actual [0] Failed to load tree-sitter-pascal library ]]>
-                      </message>
-                      <stack-trace>
-                        <![CDATA[  ]]>
-                      </stack-trace>
-                    </failure>
-                  </test-case>
-                  <test-case name="TestCaptureCount" executed="True" result="Error" success="False" time="0.000" asserts="0" >
-                    <failure>
-                      <message>
-                        <![CDATA[ Expected [0] equals actual [0] Failed to load tree-sitter-pascal library ]]>
-                      </message>
-                      <stack-trace>
-                        <![CDATA[  ]]>
-                      </stack-trace>
-                    </failure>
-                  </test-case>
-                  <test-case name="TestCaptureNameForID" executed="True" result="Error" success="False" time="0.000" asserts="0" >
-                    <failure>
-                      <message>
-                        <![CDATA[ Expected [0] equals actual [0] Failed to load tree-sitter-pascal library ]]>
-                      </message>
-                      <stack-trace>
-                        <![CDATA[  ]]>
-                      </stack-trace>
-                    </failure>
-                  </test-case>
-                  <test-case name="TestStringCount" executed="True" result="Error" success="False" time="0.000" asserts="0" >
-                    <failure>
-                      <message>
-                        <![CDATA[ Expected [0] equals actual [0] Failed to load tree-sitter-pascal library ]]>
-                      </message>
-                      <stack-trace>
-                        <![CDATA[  ]]>
-                      </stack-trace>
-                    </failure>
-                  </test-case>
-                  <test-case name="TestExecuteNextMatch" executed="True" result="Error" success="False" time="0.000" asserts="0" >
-                    <failure>
-                      <message>
-                        <![CDATA[ Expected [0] equals actual [0] Failed to load tree-sitter-pascal library ]]>
-                      </message>
-                      <stack-trace>
-                        <![CDATA[  ]]>
-                      </stack-trace>
-                    </failure>
-                  </test-case>
-                  <test-case name="TestExecuteNextCapture" executed="True" result="Error" success="False" time="0.000" asserts="0" >
-                    <failure>
-                      <message>
-                        <![CDATA[ Expected [0] equals actual [0] Failed to load tree-sitter-pascal library ]]>
-                      </message>
-                      <stack-trace>
-                        <![CDATA[  ]]>
-                      </stack-trace>
-                    </failure>
-                  </test-case>
-                  <test-case name="TestMatchLimit" executed="True" result="Error" success="False" time="0.000" asserts="0" >
-                    <failure>
-                      <message>
-                        <![CDATA[ Expected [0] equals actual [0] Failed to load tree-sitter-pascal library ]]>
-                      </message>
-                      <stack-trace>
-                        <![CDATA[  ]]>
-                      </stack-trace>
-                    </failure>
-                  </test-case>
-                  <test-case name="TestMultiPatternQuery" executed="True" result="Error" success="False" time="0.000" asserts="0" >
-                    <failure>
-                      <message>
-                        <![CDATA[ Expected [0] equals actual [0] Failed to load tree-sitter-pascal library ]]>
-                      </message>
-                      <stack-trace>
-                        <![CDATA[  ]]>
-                      </stack-trace>
-                    </failure>
-                  </test-case>
-                  <test-case name="TestQueryNoMatches" executed="True" result="Error" success="False" time="0.000" asserts="0" >
-                    <failure>
-                      <message>
-                        <![CDATA[ Expected [0] equals actual [0] Failed to load tree-sitter-pascal library ]]>
-                      </message>
-                      <stack-trace>
-                        <![CDATA[  ]]>
-                      </stack-trace>
-                    </failure>
-                  </test-case>
+                  <test-case name="TestCreateValidQuery" executed="True" result="Success" success="True" time="0.003" asserts="0" />
+                  <test-case name="TestCreateInvalidQuery_ErrorOffset" executed="True" result="Success" success="True" time="0.000" asserts="0" />
+                  <test-case name="TestPatternCount" executed="True" result="Success" success="True" time="0.001" asserts="0" />
+                  <test-case name="TestCaptureCount" executed="True" result="Success" success="True" time="0.001" asserts="0" />
+                  <test-case name="TestCaptureNameForID" executed="True" result="Success" success="True" time="0.001" asserts="0" />
+                  <test-case name="TestStringCount" executed="True" result="Success" success="True" time="0.002" asserts="0" />
+                  <test-case name="TestExecuteNextMatch" executed="True" result="Success" success="True" time="0.001" asserts="0" />
+                  <test-case name="TestExecuteNextCapture" executed="True" result="Success" success="True" time="0.001" asserts="0" />
+                  <test-case name="TestMatchLimit" executed="True" result="Success" success="True" time="0.000" asserts="0" />
+                  <test-case name="TestMultiPatternQuery" executed="True" result="Success" success="True" time="0.002" asserts="0" />
+                  <test-case name="TestQueryNoMatches" executed="True" result="Success" success="True" time="0.000" asserts="0" />
                 </results>
               </test-suite>
-              <test-suite type="Fixture" name="TTreeTests" executed="True" result="Success" success="True" time="0.003" >
+              <test-suite type="Fixture" name="TTreeTests" executed="True" result="Success" success="True" time="0.002" >
                 <results>
-                  <test-case name="TestRootNodeNotNull" executed="True" result="Error" success="False" time="0.000" asserts="0" >
-                    <failure>
-                      <message>
-                        <![CDATA[ Expected [0] equals actual [0] Failed to load tree-sitter-pascal library ]]>
-                      </message>
-                      <stack-trace>
-                        <![CDATA[  ]]>
-                      </stack-trace>
-                    </failure>
-                  </test-case>
-                  <test-case name="TestTreeLanguageNotNil" executed="True" result="Error" success="False" time="0.000" asserts="0" >
-                    <failure>
-                      <message>
-                        <![CDATA[ Expected [0] equals actual [0] Failed to load tree-sitter-pascal library ]]>
-                      </message>
-                      <stack-trace>
-                        <![CDATA[  ]]>
-                      </stack-trace>
-                    </failure>
-                  </test-case>
-                  <test-case name="TestClone" executed="True" result="Error" success="False" time="0.000" asserts="0" >
-                    <failure>
-                      <message>
-                        <![CDATA[ Expected [0] equals actual [0] Failed to load tree-sitter-pascal library ]]>
-                      </message>
-                      <stack-trace>
-                        <![CDATA[  ]]>
-                      </stack-trace>
-                    </failure>
-                  </test-case>
-                  <test-case name="TestTreeNilSafe" executed="True" result="Error" success="False" time="0.000" asserts="0" >
-                    <failure>
-                      <message>
-                        <![CDATA[ Expected [0] equals actual [0] Failed to load tree-sitter-pascal library ]]>
-                      </message>
-                      <stack-trace>
-                        <![CDATA[  ]]>
-                      </stack-trace>
-                    </failure>
-                  </test-case>
-                  <test-case name="TestTreeNilSafe_NilSelf" executed="True" result="Error" success="False" time="0.000" asserts="0" >
-                    <failure>
-                      <message>
-                        <![CDATA[ Expected [0] equals actual [0] Failed to load tree-sitter-pascal library ]]>
-                      </message>
-                      <stack-trace>
-                        <![CDATA[  ]]>
-                      </stack-trace>
-                    </failure>
-                  </test-case>
+                  <test-case name="TestRootNodeNotNull" executed="True" result="Success" success="True" time="0.000" asserts="0" />
+                  <test-case name="TestTreeLanguageNotNil" executed="True" result="Success" success="True" time="0.000" asserts="0" />
+                  <test-case name="TestClone" executed="True" result="Success" success="True" time="0.000" asserts="0" />
+                  <test-case name="TestTreeNilSafe" executed="True" result="Success" success="True" time="0.000" asserts="0" />
+                  <test-case name="TestTreeNilSafe_NilSelf" executed="True" result="Success" success="True" time="0.000" asserts="0" />
                 </results>
               </test-suite>
           </results>

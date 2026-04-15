@@ -126,6 +126,7 @@
             <Form>DTSMainForm</Form>
             <FormType>dfm</FormType>
         </DCCReference>
+        <DCCReference Include="frmDTSMain.Controller.pas"/>
         <DCCReference Include="frmDTSLanguage.pas">
             <Form>DTSLanguageForm</Form>
             <FormType>dfm</FormType>

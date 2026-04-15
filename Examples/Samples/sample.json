@@ -1,0 +1,11 @@
+{
+  "name": "delphi-tree-sitter",
+  "version": "1.0.0",
+  "description": "Tree-sitter bindings for Delphi",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Jim McKeeth",
+  "license": "MIT"
+}

@@ -3,10 +3,14 @@ unit TreeSitter.Downloader;
 interface
 
 uses
-  System.SysUtils, System.Classes, System.Net.HttpClient, System.Net.HttpClientComponent;
+  System.SysUtils, System.Classes, System.Net.HttpClient, System.Net.HttpClientComponent,
+  System.JSON;
 
 type
   TTreeSitterDownloader = class
+  private
+    class var FBaseURL: string;
+    class function FetchLatestReleaseURL: string;
   public
     class function DownloadFile(const AURL: string; const ADestPath: string): Boolean; overload;
     class function DownloadFile(const AURL: string; const ADestPath: string; out AError: string): Boolean; overload;
@@ -46,7 +50,7 @@ begin
   try
     LClient.HandleRedirects := True;
     LDir := ExtractFilePath(ADestPath);
-    if (LDir <> '') then
+    if LDir <> '' then
       ForceDirectories(LDir);
     LFileStream := TFileStream.Create(ADestPath, fmCreate);
     try
@@ -55,9 +59,7 @@ begin
         if (LResponse.StatusCode >= 200) and (LResponse.StatusCode < 300) and (LFileStream.Size > 0) then
           Result := True
         else
-        begin
           AError := Format('HTTP %d: %s (URL: %s)', [LResponse.StatusCode, LResponse.StatusText, AURL]);
-        end;
       except
         on E: Exception do
           AError := E.Message + ' (URL: ' + AURL + ')';
@@ -72,9 +74,47 @@ begin
   end;
 end;
 
+class function TTreeSitterDownloader.FetchLatestReleaseURL: string;
+var
+  LClient: TNetHTTPClient;
+  LResponse: IHTTPResponse;
+  LJSON: TJSONObject;
+begin
+  Result := '';
+  LClient := TNetHTTPClient.Create(nil);
+  try
+    LClient.UserAgent := 'Delphi-Tree-Sitter-Downloader';
+    try
+      // Use the GitHub API to get the latest release
+      LResponse := LClient.Get('https://api.github.com/repos/jimmckeeth/delphi-tree-sitter/releases/latest');
+      if LResponse.StatusCode = 200 then
+      begin
+        LJSON := TJSONObject.ParseJSONValue(LResponse.ContentAsString) as TJSONObject;
+        if Assigned(LJSON) then
+        try
+          Result := Format('https://github.com/jimmckeeth/delphi-tree-sitter/releases/download/%s/',
+            [LJSON.GetValue<string>('tag_name')]);
+        finally
+          LJSON.Free;
+        end;
+      end;
+    except
+      // Fallback or handle error
+    end;
+  finally
+    LClient.Free;
+  end;
+end;
+
 class function TTreeSitterDownloader.GetBaseURL: string;
 begin
-  Result := 'https://github.com/jimmckeeth/tree-sitter-pascal/releases/download/v0.1.0/';
+  if FBaseURL = '' then
+    FBaseURL := FetchLatestReleaseURL;
+  
+  if FBaseURL = '' then
+    Result := 'https://github.com/jimmckeeth/delphi-tree-sitter/releases/download/v0.1.0/'
+  else
+    Result := FBaseURL;
 end;
 
 class function TTreeSitterDownloader.GetCoreURL: string;

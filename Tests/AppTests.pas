@@ -37,6 +37,7 @@ type
     [Test] procedure TestFindChildByField;
     [Test] procedure TestCurrentLanguage;
     [Test] procedure TestSetLanguage_Resets;
+    [Test] procedure TestLanguagesList;
   end;
 
   [TestFixture]
@@ -269,6 +270,13 @@ begin
   Assert.IsNotNull(FManager.Tree);
   FManager.SetLanguage('pascal');
   Assert.IsNull(FManager.Tree, 'Tree should be freed when language changes');
+end;
+
+procedure TAppManagerTests.TestLanguagesList;
+begin
+  Assert.IsNotNull(FManager.Languages);
+  Assert.IsTrue(FManager.Languages.Count >= 4, 'Should have at least pascal, c, python, typescript');
+  Assert.AreEqual('pascal', FManager.Languages[0].BaseName);
 end;
 
 { TNodeDisplayTextTests }

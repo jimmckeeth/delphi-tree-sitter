@@ -3,6 +3,7 @@ program DelphiTreeSitterVCLDemo;
 uses
   Vcl.Forms,
   frmDTSMain in 'frmDTSMain.pas' {DTSMainForm},
+  frmDTSMain.Controller in 'frmDTSMain.Controller.pas',
   frmDTSLanguage in 'frmDTSLanguage.pas' {DTSLanguageForm},
   frmDTSQuery in 'frmDTSQuery.pas' {DTSQueryForm};
 
