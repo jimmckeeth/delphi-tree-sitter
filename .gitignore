@@ -62,6 +62,10 @@ __history/
 __recovery/
 *.~*
 
+# Build folders
+**/Debug/
+**/Release/
+
 # Castalia statistics file (since XE7 Castalia is distributed with Delphi)
 *.stat
 
@@ -70,3 +74,4 @@ __recovery/
 
 # ignore auto-created DevExpress skin configuration file
 *.skincfg
+/Libs
