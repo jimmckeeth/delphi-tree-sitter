@@ -73,11 +73,6 @@ jobs:
         with:
           version: 0.13.0
 
-      - name: Install PowerShell
-        run: |
-          sudo apt-get update -q
-          sudo apt-get install -y powershell
-
       - name: Build core, Pascal, and extra grammars (Linux64)
         working-directory: Examples
         shell: pwsh
@@ -115,9 +110,6 @@ jobs:
         uses: mlugg/setup-zig@v1
         with:
           version: 0.13.0
-
-      - name: Install PowerShell
-        run: brew install --cask powershell
 
       - name: Build core, Pascal, and extra grammars (macOS-x64 & macOS-arm64)
         working-directory: Examples

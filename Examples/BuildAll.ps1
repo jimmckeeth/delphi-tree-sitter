@@ -85,10 +85,13 @@ try {
                     }
                 }
 
-                Write-Host "Building project: $($Project.Name)..."                
+                Write-Host "Building project: $($Project.Name)..."
                 # 2. Build Delphi Project
-                & $BuildDproj -ProjectFile $Project.FullName -Platform $Platform -Config $Config
-                
+                # Spawn a child process so rsvars.bat PATH additions don't accumulate
+                # in our process on each iteration.
+                pwsh -NoProfile -File $BuildDproj `
+                    -ProjectFile $Project.FullName -Platform $Platform -Config $Config
+
                 if ($LASTEXITCODE -eq 0) {
                     # 3. Copy Native Libs to output folder
                     # Try several common output locations
