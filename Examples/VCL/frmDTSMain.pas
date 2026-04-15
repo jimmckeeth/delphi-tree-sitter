@@ -205,7 +205,7 @@ end;
 
 procedure TDTSMainForm.actGetChildByFieldExecute(Sender: TObject);
 begin
-  FController.GetChildByField(cbFields.ItemIndex + 1);
+  FController.GetChildByField(Integer(cbFields.Items.Objects[cbFields.ItemIndex]));
 end;
 
 procedure TDTSMainForm.actGetChildByFieldUpdate(Sender: TObject);
@@ -314,10 +314,15 @@ var
   sSource: string;
 begin
   if not OD.Execute(Handle) then Exit;
-  FController.LoadFile(OD.FileName, sSource);
-  memCode.Lines.Text := sSource;
-  FEditChanged := True;
-  FController.ParseSource(sSource);
+  try
+    FController.LoadFile(OD.FileName, sSource);
+    memCode.Lines.Text := sSource;
+    FEditChanged := True;
+    FController.ParseSource(sSource);
+  except
+    on E: Exception do
+      ShowError('Failed to load file: ' + E.Message);
+  end;
 end;
 
 procedure TDTSMainForm.btnQueryClick(Sender: TObject);
@@ -363,12 +368,16 @@ procedure TDTSMainForm.cbCodeChange(Sender: TObject);
 var
   entry: TTSLanguageEntry;
 begin
-  if cbCode.ItemIndex >= 0 then
-  begin
-    entry := FController.AppManager.Languages[cbCode.ItemIndex];
+  if cbCode.ItemIndex < 0 then Exit;
+  if (FController = nil) or (not FController.Initialized) then Exit;
+  entry := FController.AppManager.Languages[cbCode.ItemIndex];
+  try
     FController.ChangeLanguage(entry.BaseName);
     LoadSampleForLanguage;
     FController.ParseSource(memCode.Lines.Text);
+  except
+    on E: Exception do
+      ShowError('Failed to load grammar: ' + E.Message);
   end;
 end;
 
@@ -399,6 +408,13 @@ begin
   FController := TDTSMainController.Create(Self);
   try
     FController.Initialize;
+
+    // If Initialize failed (DLL not found / download declined), stop here.
+    if not FController.Initialized then
+    begin
+      Close;
+      Exit;
+    end;
 
     //initialize property grid captions
     sgNodeProps.RowCount := Ord(High(TSGNodePropRow)) - Ord(Low(TSGNodePropRow)) + 1;
@@ -524,7 +540,7 @@ end;
 
 procedure TDTSMainForm.memCodeExit(Sender: TObject);
 begin
-  if FEditChanged then
+  if FEditChanged and (FController <> nil) and FController.Initialized then
     FController.ParseSource(memCode.Lines.Text);
 end;
 

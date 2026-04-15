@@ -1,10 +1,10 @@
-unit frmDTSMain.Controller;
+﻿unit frmDTSMain.Controller;
 
 interface
 
 uses
   System.SysUtils, System.Classes, System.Generics.Collections,
-  TreeSitter, TreeSitterLib, TreeSitter.App;
+  TreeSitter, TreeSitterLib, TreeSitter.Loader, TreeSitter.App;
 
 type
   IDTSMainView = interface
@@ -29,6 +29,9 @@ type
   public
     constructor Create(AView: IDTSMainView);
     destructor Destroy; override;
+    // Initialize MUST be called once after Create.
+    // It loads the core library and creates the app manager.
+    // Check Initialized before calling any other method.
     procedure Initialize;
     procedure LoadFile(const AFileName: string; out ASource: string);
     procedure ParseSource(const ASource: string);
@@ -48,29 +51,37 @@ constructor TDTSMainController.Create(AView: IDTSMainView);
 begin
   inherited Create;
   FView := AView;
+  // Set up the grammar loader and download callback.
+  // FAppManager is intentionally NOT created here — TTSParser.Create requires
+  // the core DLL to be loaded first, which happens in Initialize.
   FGrammarLoader := TTSGrammarLoader.Create;
   FGrammarLoader.OnConfirmDownload :=
     function(const AMessage: string): Boolean
     begin
       Result := FView.ConfirmDownload(AMessage);
     end;
-  FAppManager := TTSAppManager.Create(FGrammarLoader);
 end;
 
 destructor TDTSMainController.Destroy;
 begin
-  FAppManager.Free;
-  FGrammarLoader.Free;
+  FreeAndNil(FAppManager);
+  FreeAndNil(FGrammarLoader);
   inherited;
 end;
 
 procedure TDTSMainController.Initialize;
 begin
+  // Load the core library. EnsureCoreLoaded handles the not-found case,
+  // prompting a download if the callback allows it.
   if not FGrammarLoader.EnsureCoreLoaded then
   begin
-    FView.ShowError('Tree-sitter core library not found and download was declined.');
+    FView.ShowError(
+      'Tree-sitter core library not found. ' +
+      'Place tree-sitter.dll next to the executable, or allow the download.');
     Exit;
   end;
+  // Core is loaded — safe to create the parser now.
+  FAppManager := TTSAppManager.Create(FGrammarLoader);
   FInitialized := True;
 end;
 
@@ -87,12 +98,14 @@ end;
 
 procedure TDTSMainController.ParseSource(const ASource: string);
 begin
+  if not FInitialized or (FAppManager = nil) then Exit;
   if FAppManager.ParseSource(ASource) then
     FView.UpdateTreeView(FAppManager.Tree);
 end;
 
 procedure TDTSMainController.ChangeLanguage(const ALangBaseName: string);
 begin
+  if not FInitialized or (FAppManager = nil) then Exit;
   FAppManager.SetLanguage(ALangBaseName);
   FView.UpdateLanguageFields(FAppManager.GetLanguageFields);
 end;
@@ -120,7 +133,7 @@ procedure TDTSMainController.GetChildByField(AFieldId: Integer);
 var
   foundNode: TTSNode;
 begin
-  if FSelectedNode.IsNull then Exit;
+  if not FInitialized or FSelectedNode.IsNull then Exit;
   foundNode := FSelectedNode.ChildByField(AFieldId);
   if not foundNode.IsNull then
     SelectedNode := foundNode

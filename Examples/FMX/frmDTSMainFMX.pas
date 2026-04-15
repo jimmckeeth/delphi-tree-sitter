@@ -31,12 +31,15 @@ type
     FGrammarLoader: TTSGrammarLoader;
     FAppManager: TTSAppManager;
     FEditChanged: Boolean;
+    FRepoRoot: string;
     function FindRepoRoot: string;
     procedure LoadSampleForLanguage;
     procedure ParseContent;
     procedure FillTreeView;
     procedure FillNode(AParentItem: TTreeViewItem; const ANode: TTSNode);
+    procedure ExpandTreeToDepth(AItem: TTreeViewItem; ADepth: Integer);
     procedure PopulateFiles;
+    procedure treeViewChange(Sender: TObject);
   public
   end;
 
@@ -64,6 +67,8 @@ begin
   end;
   FAppManager := TTSAppManager.Create(FGrammarLoader);
 
+  treeView.OnChange := treeViewChange;
+
   cbCode.Items.Clear;
   for var entry in FAppManager.Languages do
     cbCode.Items.Add(entry.DisplayName);
@@ -82,11 +87,16 @@ function TDTSMainFormFMX.FindRepoRoot: string;
 var
   i: Integer;
 begin
+  if FRepoRoot <> '' then
+    Exit(FRepoRoot);
   Result := ExtractFilePath(ParamStr(0));
-  for i := 1 to 5 do
+  for i := 1 to 6 do
   begin
     if TDirectory.Exists(TPath.Combine(Result, 'Source')) then
+    begin
+      FRepoRoot := Result;
       Exit;
+    end;
     Result := TPath.GetFullPath(TPath.Combine(Result, '..'));
   end;
   Result := '';
@@ -113,32 +123,45 @@ end;
 
 procedure TDTSMainFormFMX.PopulateFiles;
 var
-  LBaseDir: string;
+  LBaseDir, LSepBase, LPath, LFile, LRelPath: string;
   LPaths: TArray<string>;
-  LPath: string;
   LFiles: TArray<string>;
-  LFile: string;
 begin
   cbFiles.Items.BeginUpdate;
   try
     cbFiles.Items.Clear;
     LBaseDir := FindRepoRoot;
+    if LBaseDir = '' then Exit;
+
+    // Ensure base has trailing separator for reliable prefix stripping
+    LSepBase := LBaseDir;
+    if not LSepBase.EndsWith(PathDelim) then
+      LSepBase := LSepBase + PathDelim;
 
     LPaths := [
       TPath.Combine(LBaseDir, 'Source'),
-      TPath.Combine(LBaseDir, 'Examples\FMX'),
-      TPath.Combine(LBaseDir, 'Examples\Shared'),
-      TPath.Combine(LBaseDir, 'Examples\Samples')
+      TPath.Combine(LBaseDir, TPath.Combine('Examples', 'FMX')),
+      TPath.Combine(LBaseDir, TPath.Combine('Examples', 'Shared')),
+      TPath.Combine(LBaseDir, TPath.Combine('Examples', 'Samples'))
     ];
 
     for LPath in LPaths do
     begin
-      if TDirectory.Exists(LPath) then
+      if not TDirectory.Exists(LPath) then Continue;
+      LFiles := TDirectory.GetFiles(LPath, '*', TSearchOption.soAllDirectories);
+      for LFile in LFiles do
       begin
-        LFiles := TDirectory.GetFiles(LPath, '*', TSearchOption.soAllDirectories);
-        
-        for LFile in LFiles do
-          cbFiles.Items.Add(LFile);
+        // Make path relative to repo root
+        if LFile.StartsWith(LSepBase, True) then
+          LRelPath := Copy(LFile, Length(LSepBase) + 1, MaxInt)
+        else
+          LRelPath := LFile;
+
+        // Skip files inside any directory component that begins with '__'
+        if LRelPath.Contains(PathDelim + '__') or LRelPath.Contains('/' + '__') then
+          Continue;
+
+        cbFiles.Items.Add(LRelPath);
       end;
     end;
   finally
@@ -147,10 +170,15 @@ begin
 end;
 
 procedure TDTSMainFormFMX.cbFilesChange(Sender: TObject);
+var
+  relPath, absPath: string;
 begin
-  if cbFiles.ItemIndex >= 0 then
+  if cbFiles.ItemIndex < 0 then Exit;
+  relPath := cbFiles.Items[cbFiles.ItemIndex];
+  absPath := TPath.Combine(FindRepoRoot, relPath);
+  if TFile.Exists(absPath) then
   begin
-    memCode.Lines.LoadFromFile(cbFiles.Selected.Text);
+    memCode.Lines.LoadFromFile(absPath);
     FEditChanged := True;
     ParseContent;
   end;
@@ -210,6 +238,7 @@ begin
   begin
     item := TTreeViewItem.Create(Self);
     item.Text := BuildNodeDisplayText(info);
+    item.Tag := info.Node.StartPoint.row; // Store start row for scroll-to-line
     if AParentItem = nil then
       treeView.AddObject(item)
     else
@@ -219,18 +248,54 @@ begin
   end;
 end;
 
+procedure TDTSMainFormFMX.ExpandTreeToDepth(AItem: TTreeViewItem; ADepth: Integer);
+var
+  i: Integer;
+begin
+  if ADepth <= 0 then Exit;
+  AItem.IsExpanded := True;
+  for i := 0 to AItem.Count - 1 do
+    ExpandTreeToDepth(AItem.Items[i], ADepth - 1);
+end;
+
 procedure TDTSMainFormFMX.FillTreeView;
 var
   rootItem: TTreeViewItem;
   rootInfo: TTSNodeInfo;
 begin
-  treeView.Clear;
-  if FAppManager.Tree = nil then Exit;
-  rootInfo := FAppManager.GetRootNodeInfo;
-  rootItem := TTreeViewItem.Create(Self);
-  rootItem.Text := rootInfo.NodeType;
-  treeView.AddObject(rootItem);
-  FillNode(rootItem, FAppManager.Tree.RootNode);
+  treeView.BeginUpdate;
+  try
+    treeView.Clear;
+    if FAppManager.Tree = nil then Exit;
+    rootInfo := FAppManager.GetRootNodeInfo;
+    rootItem := TTreeViewItem.Create(Self);
+    rootItem.Text := rootInfo.NodeType;
+    rootItem.Tag := 0;
+    treeView.AddObject(rootItem);
+    FillNode(rootItem, FAppManager.Tree.RootNode);
+  finally
+    treeView.EndUpdate;
+  end;
+  // Expand 3 levels after rendering is ready
+  if treeView.Count > 0 then
+    ExpandTreeToDepth(treeView.Items[0], 3);
+end;
+
+procedure TDTSMainFormFMX.treeViewChange(Sender: TObject);
+var
+  item: TTreeViewItem;
+  startRow: Integer;
+  caretPos: TCaretPosition;
+begin
+  item := treeView.Selected;
+  if item = nil then Exit;
+  startRow := item.Tag;
+  if (startRow >= 0) and (startRow < memCode.Lines.Count) then
+  begin
+    caretPos.Line := startRow;
+    caretPos.Pos := 0;
+    memCode.CaretPosition := caretPos;
+  end;
 end;
 
 procedure TDTSMainFormFMX.ParseContent;

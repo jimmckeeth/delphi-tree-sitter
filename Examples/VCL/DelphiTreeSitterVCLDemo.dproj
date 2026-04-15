@@ -5,7 +5,7 @@
         <Config Condition="'$(Config)'==''">Debug</Config>
         <FrameworkType>VCL</FrameworkType>
         <MainSource>DelphiTreeSitterVCLDemo.dpr</MainSource>
-        <Platform Condition="'$(Platform)'==''">Win64</Platform>
+        <Platform Condition="'$(Platform)'==''">Win32</Platform>
         <ProjectGuid>{AAA39C66-11BC-4D19-9713-3C4763BC51D7}</ProjectGuid>
         <ProjectName Condition="'$(ProjectName)'==''">DelphiTreeSitterVCLDemo</ProjectName>
         <ProjectVersion>20.4</ProjectVersion>

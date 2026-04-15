@@ -25,15 +25,18 @@ object DTSMainFormFMX: TDTSMainFormFMX
     end
     object cbCode: TComboBox
       Anchors = [akTop, akRight]
-      Position.X = 532.000000000000000000
+      Position.X = 492.000000000000000000
       Position.Y = 10.000000000000000000
+      Size.Width = 140.000000000000000000
+      Size.Height = 22.000000000000000000
+      Size.PlatformDefault = False
       TabOrder = 2
       OnChange = cbCodeChange
     end
     object Label1: TLabel
       Anchors = [akTop, akRight]
-      Position.X = 456.000000000000000000
-      Position.Y = 13.000000000000000000
+      Position.X = 420.000000000000000000
+      Position.Y = 11.000000000000000000
       Size.Width = 68.000000000000000000
       Size.Height = 17.000000000000000000
       Size.PlatformDefault = False
@@ -47,7 +50,7 @@ object DTSMainFormFMX: TDTSMainFormFMX
         '')
       Position.X = 96.000000000000000000
       Position.Y = 10.000000000000000000
-      Size.Width = 361.000000000000000000
+      Size.Width = 337.000000000000000000
       Size.Height = 22.000000000000000000
       Size.PlatformDefault = False
       TabOrder = 4
