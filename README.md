@@ -1,6 +1,7 @@
 # delphi-tree-sitter
 
-<img src="Docs\Delphi-tree-sitter-512.avif" alt="Delphi-tree-sitter.avif" style="zoom:50%; float:right;" />Delphi (and potentially Free Pascal) bindings for consuming [tree-sitter](https://github.com/tree-sitter/tree-sitter) grammar. Not to be confused with [tree-sitter-pascal](https://github.com/jimmckeeth/tree-sitter-pascal), the grammar allowing tree-sitter to understand Delphi's Object Pascal, Free Pascal, and similar Pascal dialects.  
+<img src="Docs\Delphi-tree-sitter-512.avif" alt="Delphi-tree-sitter.avif" style="zoom:50%; float:right;" />
+Delphi (and potentially Free Pascal) bindings for consuming [tree-sitter](https://github.com/tree-sitter/tree-sitter) grammar. Not to be confused with [tree-sitter-pascal](https://github.com/jimmckeeth/tree-sitter-pascal), the grammar allowing tree-sitter to understand Delphi's Object Pascal, Free Pascal, and similar Pascal dialects.  
 
 ## Status
 
