@@ -1,0 +1,243 @@
+name: Build Native Libraries
+
+on:
+  push:
+    tags:
+      - 'v*'
+  workflow_dispatch:
+    inputs:
+      platforms:
+        description: 'Comma-separated platforms (Win32,Win64,Linux64,macOS-x64,macOS-arm64)'
+        required: false
+        default: 'Win32,Win64,Linux64,macOS-x64,macOS-arm64'
+
+# Grammar repositories to build alongside the Pascal grammar.
+# Each entry provides the GitHub repo and the exported C symbol name.
+env:
+  GRAMMARS: |
+    tree-sitter/tree-sitter-c:tree_sitter_c
+    tree-sitter/tree-sitter-python:tree_sitter_python
+    tree-sitter/tree-sitter-typescript:tree_sitter_typescript
+    tree-sitter/tree-sitter-javascript:tree_sitter_javascript
+    tree-sitter/tree-sitter-json:tree_sitter_json
+
+jobs:
+  build-windows:
+    name: Build Windows DLLs
+    runs-on: windows-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - name: Install Zig
+        uses: mlugg/setup-zig@v1
+        with:
+          version: 0.13.0
+
+      - name: Build core + Pascal (Win32 & Win64)
+        working-directory: Examples
+        shell: pwsh
+        run: |
+          .\BuildLibs.ps1 -Platforms Win32,Win64
+
+      - name: Clone and build extra grammars (Win32)
+        shell: pwsh
+        run: |
+          $TsCoreInc = "tree-sitter-pascal\tree-sitter\lib\include"
+          $grammars = @{
+            'c'          = 'tree-sitter/tree-sitter-c'
+            'python'     = 'tree-sitter/tree-sitter-python'
+            'typescript' = 'tree-sitter/tree-sitter-typescript'
+            'javascript' = 'tree-sitter/tree-sitter-javascript'
+            'json'       = 'tree-sitter/tree-sitter-json'
+          }
+          foreach ($lang in $grammars.Keys) {
+            $repo = $grammars[$lang]
+            Write-Host "Cloning $repo..."
+            git clone --depth 1 "https://github.com/$repo.git" "grammars/$lang"
+            $src = "grammars/$lang/src/parser.c"
+            if (-not (Test-Path $src)) { Write-Warning "No parser.c for $lang"; continue }
+
+            # Win32
+            $out32 = "Libs/Win32/tree-sitter-$lang.dll"
+            Write-Host "  -> $out32"
+            zig cc -shared -o $out32 $src "-Igrammars/$lang/src" "-I$TsCoreInc" -target x86-windows-gnu -O2
+            if ($LASTEXITCODE -ne 0) { Write-Error "Failed Win32 for $lang"; exit 1 }
+
+            # Win64
+            $out64 = "Libs/Win64/tree-sitter-$lang.dll"
+            Write-Host "  -> $out64"
+            zig cc -shared -o $out64 $src "-Igrammars/$lang/src" "-I$TsCoreInc" -target x86_64-windows-gnu -O2
+            if ($LASTEXITCODE -ne 0) { Write-Error "Failed Win64 for $lang"; exit 1 }
+          }
+
+      - name: Rename DLLs with platform suffix for release assets
+        shell: pwsh
+        run: |
+          $platforms = @{
+            'Win32' = 'windows-x86'
+            'Win64' = 'windows-x64'
+          }
+          foreach ($plat in $platforms.Keys) {
+            $suffix = $platforms[$plat]
+            $dir = "Libs/$plat"
+            foreach ($dll in (Get-ChildItem "$dir\*.dll")) {
+              $base = $dll.BaseName          # e.g. "tree-sitter-pascal"
+              $dest = "$dir\${base}-${suffix}.dll"
+              Copy-Item $dll.FullName $dest
+              Write-Host "  $($dll.Name) -> $(Split-Path $dest -Leaf)"
+            }
+          }
+
+      - name: Upload Windows artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: windows-dlls
+          path: |
+            Libs/Win32/*-windows-x86.dll
+            Libs/Win64/*-windows-x64.dll
+          retention-days: 7
+
+  build-linux:
+    name: Build Linux shared libraries
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - name: Install Zig
+        uses: mlugg/setup-zig@v1
+        with:
+          version: 0.13.0
+
+      - name: Build core + Pascal (Linux64)
+        working-directory: Examples
+        run: |
+          pwsh -Command ".\BuildLibs.ps1 -Platforms Linux64"
+
+      - name: Clone and build extra grammars (Linux64)
+        run: |
+          TSINC="tree-sitter-pascal/tree-sitter/lib/include"
+          declare -A GRAMMARS=(
+            [c]="tree-sitter/tree-sitter-c"
+            [python]="tree-sitter/tree-sitter-python"
+            [typescript]="tree-sitter/tree-sitter-typescript"
+            [javascript]="tree-sitter/tree-sitter-javascript"
+            [json]="tree-sitter/tree-sitter-json"
+          )
+          mkdir -p Libs/Linux64
+          for lang in "${!GRAMMARS[@]}"; do
+            repo="${GRAMMARS[$lang]}"
+            echo "Cloning $repo..."
+            git clone --depth 1 "https://github.com/$repo.git" "grammars/$lang"
+            src="grammars/$lang/src/parser.c"
+            [ -f "$src" ] || { echo "No parser.c for $lang"; continue; }
+            out="Libs/Linux64/libtree-sitter-$lang.so"
+            echo "  -> $out"
+            zig cc -shared -o "$out" "$src" "-Igrammars/$lang/src" "-I$TSINC" -target x86_64-linux-gnu -O2
+          done
+
+      - name: Rename .so files with platform suffix
+        run: |
+          for f in Libs/Linux64/libtree-sitter*.so; do
+            base=$(basename "$f" .so)   # libtree-sitter-pascal
+            # strip lib prefix to match download naming convention
+            name="${base#lib}"           # tree-sitter-pascal
+            dest="Libs/Linux64/${name}-linux-x64.so"
+            cp "$f" "$dest"
+            echo "  $(basename $f) -> $(basename $dest)"
+          done
+
+      - name: Upload Linux artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: linux-libs
+          path: Libs/Linux64/*-linux-x64.so
+          retention-days: 7
+
+  build-macos:
+    name: Build macOS dylibs
+    runs-on: macos-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - name: Install Zig
+        uses: mlugg/setup-zig@v1
+        with:
+          version: 0.13.0
+
+      - name: Build core + Pascal (macOS-x64 & macOS-arm64)
+        working-directory: Examples
+        run: |
+          pwsh -Command ".\BuildLibs.ps1 -Platforms macOS-x64,macOS-arm64"
+
+      - name: Clone and build extra grammars (macOS)
+        run: |
+          TSINC="tree-sitter-pascal/tree-sitter/lib/include"
+          declare -A GRAMMARS=(
+            [c]="tree-sitter/tree-sitter-c"
+            [python]="tree-sitter/tree-sitter-python"
+            [typescript]="tree-sitter/tree-sitter-typescript"
+            [javascript]="tree-sitter/tree-sitter-javascript"
+            [json]="tree-sitter/tree-sitter-json"
+          )
+          for lang in "${!GRAMMARS[@]}"; do
+            repo="${GRAMMARS[$lang]}"
+            git clone --depth 1 "https://github.com/$repo.git" "grammars/$lang"
+            src="grammars/$lang/src/parser.c"
+            [ -f "$src" ] || continue
+            # x64
+            zig cc -shared -o "Libs/macOS-x64/libtree-sitter-$lang.dylib" \
+              "$src" "-Igrammars/$lang/src" "-I$TSINC" -target x86_64-macos-none -O2
+            # arm64
+            zig cc -shared -o "Libs/macOS-arm64/libtree-sitter-$lang.dylib" \
+              "$src" "-Igrammars/$lang/src" "-I$TSINC" -target aarch64-macos-none -O2
+          done
+
+      - name: Rename dylibs with platform suffix
+        run: |
+          for plat in macOS-x64 macOS-arm64; do
+            suffix="${plat/macOS-/macos-}"   # macos-x64 or macos-arm64
+            for f in Libs/$plat/libtree-sitter*.dylib; do
+              base=$(basename "$f" .dylib)
+              name="${base#lib}"
+              dest="Libs/$plat/${name}-${suffix}.dylib"
+              cp "$f" "$dest"
+            done
+          done
+
+      - name: Upload macOS artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: macos-libs
+          path: |
+            Libs/macOS-x64/*-macos-x64.dylib
+            Libs/macOS-arm64/*-macos-arm64.dylib
+          retention-days: 7
+
+  publish-release:
+    name: Publish GitHub Release
+    needs: [build-windows, build-linux, build-macos]
+    runs-on: ubuntu-latest
+    if: startsWith(github.ref, 'refs/tags/v')
+    permissions:
+      contents: write
+    steps:
+      - name: Download all artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: release-assets
+          merge-multiple: true
+
+      - name: Create / update GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: release-assets/**
+          generate_release_notes: true
