@@ -89,7 +89,7 @@ var
 begin
   if FRepoRoot <> '' then
     Exit(FRepoRoot);
-  Result := ExtractFilePath(ParamStr(0));
+  Result := TPath.GetDirectoryName(TPath.GetFullPath(ParamStr(0)));
   for i := 1 to 6 do
   begin
     if TDirectory.Exists(TPath.Combine(Result, 'Source')) then

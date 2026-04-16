@@ -3,7 +3,7 @@ unit TreeSitter.App;
 interface
 
 uses
-  System.SysUtils, System.Classes, System.Generics.Collections,
+  System.SysUtils, System.Classes, System.Generics.Collections, System.IOUtils,
   TreeSitter, TreeSitterLib, TreeSitter.Loader, TreeSitter.Downloader;
 
 type
@@ -143,12 +143,49 @@ begin
 end;
 
 function TTSGrammarLoader.InternalLoadLibrary(const APath: string): THandle;
-begin
+var
+  LSearchPaths: TArray<string>;
+  LS: string;
+  LExePath: string;
+
+  function TryLoad(const ALibPath: string): THandle;
+  begin
 {$IFDEF MSWINDOWS}
-  Result := Winapi.Windows.LoadLibrary(PChar(APath));
+    Result := Winapi.Windows.LoadLibrary(PChar(ALibPath));
 {$ELSE}
-  Result := THandle(NativeUInt(dlopen(PAnsiChar(AnsiString(APath)), RTLD_LAZY)));
+    Result := THandle(NativeUInt(dlopen(PAnsiChar(AnsiString(ALibPath)), RTLD_LAZY or RTLD_GLOBAL)));
 {$ENDIF}
+  end;
+
+begin
+  Result := TryLoad(APath);
+  if Result <> 0 then Exit;
+
+  // Try relative to EXE
+  LExePath := TPath.GetDirectoryName(TPath.GetFullPath(ParamStr(0)));
+  if not LExePath.EndsWith(PathDelim) then
+    LExePath := LExePath + PathDelim;
+  SetLength(LSearchPaths, 4);
+  LSearchPaths[0] := TPath.Combine(LExePath, APath);
+{$IFDEF WIN64}
+  LSearchPaths[1] := TPath.Combine(TPath.Combine(LExePath, '..\..\Libs\Win64'), APath);
+  LSearchPaths[2] := TPath.Combine(TPath.Combine(LExePath, '..\..\..\Libs\Win64'), APath);
+  LSearchPaths[3] := TPath.Combine(TPath.Combine(LExePath, 'Libs\Win64'), APath);
+{$ELSEIF Defined(LINUX64)}
+  LSearchPaths[1] := TPath.Combine(TPath.Combine(LExePath, '../../Libs/Linux64'), APath);
+  LSearchPaths[2] := TPath.Combine(TPath.Combine(LExePath, '../../../Libs/Linux64'), APath);
+  LSearchPaths[3] := TPath.Combine(TPath.Combine(LExePath, 'Libs/Linux64'), APath);
+{$ELSE}
+  LSearchPaths[1] := TPath.Combine(TPath.Combine(LExePath, '..\..\Libs\Win32'), APath);
+  LSearchPaths[2] := TPath.Combine(TPath.Combine(LExePath, '..\..\..\Libs\Win32'), APath);
+  LSearchPaths[3] := TPath.Combine(TPath.Combine(LExePath, 'Libs\Win32'), APath);
+{$ENDIF}
+
+  for LS in LSearchPaths do
+  begin
+    Result := TryLoad(LS);
+    if Result <> 0 then Exit;
+  end;
 end;
 
 function TTSGrammarLoader.EnsureCoreLoaded: Boolean;
@@ -184,7 +221,7 @@ var
   pAPI: TTSGetLanguageFunc;
   errMsg: string;
 begin
-  tsLibName := Format('tree-sitter-%s', [ALangBaseName]) + TTreeSitterDownloader.GetPlatformExtension;
+  tsLibName := TTreeSitterLoader.GetPlatformPrefix + 'tree-sitter-' + ALangBaseName + TTreeSitterLoader.GetPlatformExtension;
   tsAPIName := Format('tree_sitter_%s', [ALangBaseName]);
 
   if FGrammarHandles.TryGetValue(ALangBaseName, libHandle) then

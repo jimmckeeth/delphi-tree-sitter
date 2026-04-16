@@ -6,6 +6,7 @@ program TreeSitterTests;
 {$STRONGLINKTYPES ON}
 uses
   System.SysUtils,
+  System.IOUtils,
   {$IFDEF TESTINSIGHT}
   TestInsight.DUnitX,
   {$ENDIF }

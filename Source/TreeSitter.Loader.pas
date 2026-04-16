@@ -4,6 +4,7 @@ interface
 
 uses
   System.SysUtils,
+  System.IOUtils,
   TreeSitterLib;
 
 type
@@ -16,6 +17,8 @@ type
     class function Load(const ALibPath: string = ''): Boolean;
     class procedure Unload;
     class function DefaultLibName: string;
+    class function GetPlatformPrefix: string;
+    class function GetPlatformExtension: string;
     class property IsLoaded: Boolean read GetIsLoaded;
   end;
 
@@ -53,23 +56,29 @@ end;
 
 { TTreeSitterLoader }
 
-class function TTreeSitterLoader.DefaultLibName: string;
+class function TTreeSitterLoader.GetPlatformPrefix: string;
 begin
 {$IFDEF MSWINDOWS}
-  Result := 'tree-sitter.dll';
+  Result := '';
+{$ELSE}
+  Result := 'lib';
 {$ENDIF}
-{$IFDEF LINUX}
-  Result := 'libtree-sitter.so';
+end;
+
+class function TTreeSitterLoader.GetPlatformExtension: string;
+begin
+{$IFDEF MSWINDOWS}
+  Result := '.dll';
+{$ELSEIF Defined(MACOS)}
+  Result := '.dylib';
+{$ELSE}
+  Result := '.so';
 {$ENDIF}
-{$IFDEF MACOS}
-  Result := 'libtree-sitter.dylib';
-{$ENDIF}
-{$IFDEF ANDROID}
-  Result := 'libtree-sitter.so';
-{$ENDIF}
-{$IFDEF IOS}
-  Result := 'libtree-sitter.dylib';
-{$ENDIF}
+end;
+
+class function TTreeSitterLoader.DefaultLibName: string;
+begin
+  Result := GetPlatformPrefix + 'tree-sitter' + GetPlatformExtension;
 end;
 
 class function TTreeSitterLoader.GetIsLoaded: Boolean;
@@ -107,7 +116,7 @@ var
 {$IFDEF MSWINDOWS}
     FLibHandle := LoadLibrary(PChar(APath));
 {$ELSE}
-    FLibHandle := THandle(NativeUInt(dlopen(PAnsiChar(AnsiString(APath)), RTLD_LAZY)));
+    FLibHandle := THandle(NativeUInt(dlopen(PAnsiChar(AnsiString(APath)), RTLD_LAZY or RTLD_GLOBAL)));
 {$ENDIF}
     Result := FLibHandle <> 0;
   end;
@@ -123,21 +132,27 @@ begin
     goto Loaded;
 
   // Try relative to EXE
-  LExePath := ExtractFilePath(ParamStr(0));
+  LExePath := TPath.GetDirectoryName(TPath.GetFullPath(ParamStr(0)));
+  if not LExePath.EndsWith(PathDelim) then
+    LExePath := LExePath + PathDelim;
   SetLength(LSearchPaths, 4);
-  LSearchPaths[0] := LExePath + LPath;
+  LSearchPaths[0] := LExePath;
 {$IFDEF WIN64}
-  LSearchPaths[1] := LExePath + '..\..\Libs\Win64\' + LPath;
-  LSearchPaths[2] := LExePath + '..\..\..\Libs\Win64\' + LPath;
-  LSearchPaths[3] := LExePath + 'Libs\Win64\' + LPath;
+  LSearchPaths[1] := LExePath + '..\..\Libs\Win64';
+  LSearchPaths[2] := LExePath + '..\..\..\Libs\Win64';
+  LSearchPaths[3] := LExePath + 'Libs\Win64';
+{$ELSEIF Defined(LINUX64)}
+  LSearchPaths[1] := LExePath + '../../Libs/Linux64';
+  LSearchPaths[2] := LExePath + '../../../Libs/Linux64';
+  LSearchPaths[3] := LExePath + 'Libs/Linux64';
 {$ELSE}
-  LSearchPaths[1] := LExePath + '..\..\Libs\Win32\' + LPath;
-  LSearchPaths[2] := LExePath + '..\..\..\Libs\Win32\' + LPath;
-  LSearchPaths[3] := LExePath + 'Libs\Win32\' + LPath;
+  LSearchPaths[1] := LExePath + '..\..\Libs\Win32';
+  LSearchPaths[2] := LExePath + '..\..\..\Libs\Win32';
+  LSearchPaths[3] := LExePath + 'Libs\Win32';
 {$ENDIF}
 
   for LS in LSearchPaths do
-    if TryLoad(LS) then
+    if TryLoad(TPath.Combine(LS, LPath)) then
       goto Loaded;
 
   Exit(False);
@@ -262,3 +277,4 @@ finalization
   TTreeSitterLoader.Unload;
 
 end.
+

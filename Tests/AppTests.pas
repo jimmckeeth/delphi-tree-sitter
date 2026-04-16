@@ -291,7 +291,7 @@ end;
 procedure TAppManagerTests.Setup;
 begin
   FLoader := TTSGrammarLoader.Create;
-  FLoader.EnsureCoreLoaded;
+  Assert.IsTrue(FLoader.EnsureCoreLoaded, 'Failed to load tree-sitter core library');
   FManager := TTSAppManager.Create(FLoader);
   FManager.SetLanguage('pascal');
 end;

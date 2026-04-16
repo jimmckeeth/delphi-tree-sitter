@@ -10,20 +10,20 @@ The repo also contains `tree-sitter-pascal/` as a submodule — that is the _gra
 
 ## Build Commands
 
-All builds use the `DelphiBuildDPROJ.ps1` script at the repo root. **Default platform is Win32** (not Win64) unless specified.
+All builds use the `Examples\DelphiBuildDPROJ.ps1` script. **Default platform is Win32** (not Win64) unless specified.
 
 ```powershell
 # Test project
-.\DelphiBuildDPROJ.ps1 -ProjectFile Tests\TreeSitterTests.dproj -Config Debug -Platform Win32
+.\Examples\DelphiBuildDPROJ.ps1 -ProjectFile Tests\TreeSitterTests.dproj -Config Debug -Platform Win32
 
 # VCL demo
-.\DelphiBuildDPROJ.ps1 -ProjectFile Examples\VCL\DelphiTreeSitterVCLDemo.dproj -Config Debug -Platform Win32
+.\Examples\DelphiBuildDPROJ.ps1 -ProjectFile Examples\VCL\DelphiTreeSitterVCLDemo.dproj -Config Debug -Platform Win32
 
 # FMX demo
-.\DelphiBuildDPROJ.ps1 -ProjectFile Examples\FMX\DelphiTreeSitterFMXDemo.dproj -Config Debug -Platform Win32
+.\Examples\DelphiBuildDPROJ.ps1 -ProjectFile Examples\FMX\DelphiTreeSitterFMXDemo.dproj -Config Debug -Platform Win32
 
 # Console demo
-.\DelphiBuildDPROJ.ps1 -ProjectFile Examples\Console\ConsoleReadPasFile.dproj -Config Debug -Platform Win32
+.\Examples\DelphiBuildDPROJ.ps1 -ProjectFile Examples\Console\ConsoleReadPasFile.dproj -Config Debug -Platform Win32
 ```
 
 ## Running Tests

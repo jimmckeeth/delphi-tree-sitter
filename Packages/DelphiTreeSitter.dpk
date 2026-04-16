@@ -29,6 +29,9 @@ package DelphiTreeSitter;
 {$RUNONLY}
 {$IMPLICITBUILD ON}
 
+requires
+  rtl;
+
 contains
   TreeSitter in '..\Source\TreeSitter.pas',
   TreeSitterLib in '..\Source\TreeSitterLib.pas',

@@ -3,6 +3,7 @@ unit TreeSitterCoreTests;
 interface
 
 uses
+  System.SysUtils, System.IOUtils,
   DUnitX.TestFramework,
   TreeSitter, TreeSitterLib, TreeSitter.Loader, TreeSitter.Query;
 
@@ -160,11 +161,10 @@ const
 implementation
 
 uses
-  System.SysUtils
 {$IFDEF MSWINDOWS}
-  , Winapi.Windows
+  Winapi.Windows
 {$ELSE}
-  , Posix.Dlfcn
+  Posix.Dlfcn
 {$ENDIF};
 
 type
@@ -175,22 +175,64 @@ type
 procedure TTreeSitterTestBase.FixtureSetup;
 var
   pAPI: TTSGetLanguageFunc;
+  LPath: string;
+  LExePath: string;
+  LSearchPaths: TArray<string>;
+  LS: string;
+
+  function TryLoad(const ALibPath: string): THandle;
+  begin
+{$IFDEF MSWINDOWS}
+    Result := LoadLibrary(PChar(ALibPath));
+{$ELSE}
+    Result := THandle(NativeUInt(dlopen(PAnsiChar(AnsiString(ALibPath)), RTLD_LAZY)));
+{$ENDIF}
+  end;
+
 begin
   if not TTreeSitterLoader.IsLoaded then
     Assert.IsTrue(TTreeSitterLoader.Load, 'Failed to load tree-sitter core library');
 
   if FPascalLang = nil then
   begin
-{$IFDEF MSWINDOWS}
-    FPascalLibHandle := LoadLibrary('tree-sitter-pascal.dll');
+    LPath := TTreeSitterLoader.GetPlatformPrefix + 'tree-sitter-pascal' + TTreeSitterLoader.GetPlatformExtension;
+    FPascalLibHandle := TryLoad(LPath);
+
+    if FPascalLibHandle = 0 then
+    begin
+      LExePath := TPath.GetDirectoryName(TPath.GetFullPath(ParamStr(0)));
+      if not LExePath.EndsWith(PathDelim) then
+        LExePath := LExePath + PathDelim;
+
+      SetLength(LSearchPaths, 4);
+      LSearchPaths[0] := LExePath;
+{$IFDEF WIN64}
+      LSearchPaths[1] := LExePath + '..\..\Libs\Win64';
+      LSearchPaths[2] := LExePath + '..\..\..\Libs\Win64';
+      LSearchPaths[3] := LExePath + 'Libs\Win64';
+{$ELSEIF Defined(LINUX64)}
+      LSearchPaths[1] := LExePath + '../../Libs/Linux64';
+      LSearchPaths[2] := LExePath + '../../../Libs/Linux64';
+      LSearchPaths[3] := LExePath + 'Libs/Linux64';
 {$ELSE}
-    FPascalLibHandle := THandle(dlopen(PAnsiChar('libtree-sitter-pascal.so'), RTLD_LAZY));
+      LSearchPaths[1] := LExePath + '..\..\Libs\Win32';
+      LSearchPaths[2] := LExePath + '..\..\..\Libs\Win32';
+      LSearchPaths[3] := LExePath + 'Libs\Win32';
 {$ENDIF}
+
+      for LS in LSearchPaths do
+      begin
+        LPath := TPath.Combine(LS, TTreeSitterLoader.GetPlatformPrefix + 'tree-sitter-pascal' + TTreeSitterLoader.GetPlatformExtension);
+        FPascalLibHandle := TryLoad(LPath);
+        if FPascalLibHandle <> 0 then Break;
+      end;
+    end;
+
     Assert.AreNotEqual(THandle(0), FPascalLibHandle, 'Failed to load tree-sitter-pascal library');
 {$IFDEF MSWINDOWS}
     pAPI := GetProcAddress(FPascalLibHandle, 'tree_sitter_pascal');
 {$ELSE}
-    pAPI := dlsym(Pointer(NativeUInt(FPascalLibHandle)), 'tree_sitter_pascal');
+    pAPI := TTSGetLanguageFunc(NativeUInt(dlsym(NativeUInt(FPascalLibHandle), PAnsiChar('tree_sitter_pascal'))));
 {$ENDIF}
     Assert.IsTrue(Assigned(pAPI), 'tree_sitter_pascal function not found');
     FPascalLang := pAPI();
@@ -295,13 +337,16 @@ end;
 procedure TParserTests.TestParseString_Empty_Raises;
 var
   p: TTSParser;
+  LProc: TProc;
 begin
   p := TTSParser.Create;
   try
     p.Language := FPascalLang;
+    LProc := procedure begin p.ParseString(''); end;
     Assert.WillRaise(
-      procedure begin p.ParseString(''); end,
-      ETreeSitterException);
+      LProc,
+      ETreeSitterException,
+      'ParseString should raise for empty input');
   finally
     p.Free;
   end;
@@ -371,7 +416,7 @@ begin
           Result := nil;
           Exit;
         end;
-        ABytesRead := Length(srcBytes) - AByteIndex;
+        ABytesRead := UInt32(Length(srcBytes)) - AByteIndex;
         Result := Copy(srcBytes, AByteIndex, ABytesRead);
       end,
       TTSInputEncoding.TSInputEncodingUTF8);

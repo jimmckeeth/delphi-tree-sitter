@@ -66,9 +66,24 @@ end;
 
 var
   fn: string;
+  ExeDir: string;
 begin
   try
-    fn:= TPath.Combine(TPath.GetDirectoryName(ParamStr(0)), '..\..\..\..\Source\TreeSitter.pas');
+    ExeDir := TPath.GetDirectoryName(TPath.GetFullPath(ParamStr(0)));
+    // From bin/Platform/Config/ to root is 3 levels up
+    // Then into Source/
+    fn := TPath.Combine(ExeDir, TPath.Combine('..', TPath.Combine('..', TPath.Combine('..', 'Source'))));
+    fn := TPath.Combine(fn, 'TreeSitter.pas');
+    fn := TPath.GetFullPath(fn);
+
+    if not TFile.Exists(fn) then
+    begin
+      // Try one more level up just in case (different build output structure)
+      fn := TPath.Combine(ExeDir, TPath.Combine('..', TPath.Combine('..', TPath.Combine('..', TPath.Combine('..', 'Source')))));
+      fn := TPath.Combine(fn, 'TreeSitter.pas');
+      fn := TPath.GetFullPath(fn);
+    end;
+
     if TFile.Exists(fn) then
       ReadAndParsePasFile(fn) else
       raise Exception.CreateFmt('Failed to find file to parse: "%s"', [fn]);

@@ -4,7 +4,7 @@ interface
 
 uses
   System.SysUtils, System.Classes, System.Net.HttpClient, System.Net.HttpClientComponent,
-  System.JSON;
+  System.JSON, TreeSitter.Loader;
 
 type
   TTreeSitterDownloader = class
@@ -119,12 +119,12 @@ end;
 
 class function TTreeSitterDownloader.GetCoreURL: string;
 begin
-  Result := GetBaseURL + 'tree-sitter' + GetPlatformSuffix + GetPlatformExtension;
+  Result := GetBaseURL + TTreeSitterLoader.GetPlatformPrefix + 'tree-sitter' + GetPlatformSuffix + TTreeSitterLoader.GetPlatformExtension;
 end;
 
 class function TTreeSitterDownloader.GetGrammarURL(const ALang: string): string;
 begin
-  Result := GetBaseURL + 'tree-sitter-' + ALang + GetPlatformSuffix + GetPlatformExtension;
+  Result := GetBaseURL + TTreeSitterLoader.GetPlatformPrefix + 'tree-sitter-' + ALang + GetPlatformSuffix + TTreeSitterLoader.GetPlatformExtension;
 end;
 
 class function TTreeSitterDownloader.GetPlatformSuffix: string;
@@ -153,15 +153,7 @@ end;
 
 class function TTreeSitterDownloader.GetPlatformExtension: string;
 begin
-{$IFDEF MSWINDOWS}
-  Result := '.dll';
-{$ENDIF}
-{$IFDEF LINUX}
-  Result := '.so';
-{$ENDIF}
-{$IFDEF MACOS}
-  Result := '.dylib';
-{$ENDIF}
+  Result := TTreeSitterLoader.GetPlatformExtension;
 end;
 
 end.
